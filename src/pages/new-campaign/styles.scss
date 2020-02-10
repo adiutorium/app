@@ -1,0 +1,71 @@
+@import 'src/assets/styles/colors';
+.ant-form-item-label {
+  label {
+    font-weight: bold;
+  }
+}
+
+h4 {
+  text-align: center;
+}
+
+.custom-input {
+  input,
+  input:focus,
+  .ant-input-group-addon,
+  .ant-select-selection,
+  textarea:focus,
+  textarea,
+  button.ant-btn,
+  input.ant-calendar-picker-input {
+    border: none;
+    border-radius: 0;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgb(217, 217, 217);
+  }
+
+  .ant-form-extra {
+    text-align: center;
+    font-size: 1.2rem;
+    color: $title-blue;
+  }
+}
+
+.amount-input {
+  .ant-form-extra,
+  .ant-input-group-addon {
+    color: $dai-golden;
+  }
+}
+
+.new-camp-card {
+  .ant-card-extra {
+    position: absolute !important;
+    top: 50px !important;
+    h2 {
+      font-size: 1.2rem !important;
+    }
+  }
+}
+
+.document-upload {
+  width: 100%;
+  .ant-upload {
+    display: block;
+
+    button {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+.date-picker {
+  .ant-form-item-children {
+    display: block;
+    margin: 0 auto;
+    width: 8rem;
+  }
+}
