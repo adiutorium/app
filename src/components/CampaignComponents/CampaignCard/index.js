@@ -1,4 +1,5 @@
 import React from 'react'
+import { Progress } from 'antd'
 // import { Tooltip } from 'antd'
 import data from './data.json'
 import styles from './style.module.scss'
@@ -37,26 +38,37 @@ class CampaignCard extends React.Component {
             <img src={productImg} alt="" />
           </a>
         </div>
+
         <div className={styles.title}>
-          <a href="javascript: void(0);">{productName}</a>
+          <a href="javascript: void(0);">
+            {productName}
+            <Progress
+              percent={50}
+              status="active"
+              type="circle"
+              strokeColor="#46be8a"
+              width={50}
+              className="ml-2"
+            />
+          </a>
           {/*<div className={styles.price}>*/}
           {/*  {productPrice}*/}
           {/*  <div className={styles.oldPrice}>{productOldPrice}</div>*/}
           {/*</div>*/}
         </div>
-        <div className={styles.descr}>
-          {/*<div className={styles.sizes}>*/}
-          {/*  <Tooltip placement="top" title="Size S">*/}
-          {/*    <span>S</span>*/}
-          {/*  </Tooltip>*/}
-          {/*  <Tooltip placement="top" title="Size M">*/}
-          {/*    <span title="Size M">M</span>*/}
-          {/*  </Tooltip>*/}
-          {/*  <Tooltip placement="top" title="Size XL">*/}
-          {/*    <span>XL</span>*/}
-          {/*  </Tooltip>*/}
-          {/*</div>*/}
-          {productNote}
+        {/*<p className="text-muted mb-1">*/}
+
+        {/*</p>*/}
+        <div className="mb-3">
+          <span className="text-success font-size-20 font-weight-bold">500</span>{' '}
+          <span className={`${styles.dai} font-size-12 font-weight-bolder`}>
+            {' '}
+            of 1000 Dai Raised{' '}
+          </span>
+        </div>
+        <div className={styles.descr}>{productNote}</div>
+        <div className={`${styles.title} mt-2 pt-2`}>
+          <span className="text-warning">Campaign Ends on : 18 Feb 2019</span>
         </div>
       </div>
     )
