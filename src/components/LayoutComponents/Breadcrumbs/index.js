@@ -42,6 +42,17 @@ class Breadcrumbs extends React.Component {
         if (entry.url === url) {
           return [entry].concat(parents)
         }
+        if (url.includes(entry.url)) {
+          entry.tempchildren = [
+            {
+              key: url.split('/')[url.split('/').length - 1],
+              title: url.split('/')[url.split('/').length - 1].toUpperCase(),
+              url,
+            },
+          ]
+          const nested = this.getPath(entry.tempchildren, url, [entry].concat(parents))
+          return (result || []).concat(nested.filter(e => !!e))
+        }
         if (entry.children) {
           const nested = this.getPath(entry.children, url, [entry].concat(parents))
           return (result || []).concat(nested.filter(e => !!e))
@@ -54,8 +65,9 @@ class Breadcrumbs extends React.Component {
   }
 
   getBreadcrumb = (props, items) => {
+    console.log(props, items)
     const [activeMenuItem, ...path] = this.getPath(items, props.location.pathname)
-
+    console.log(activeMenuItem, path)
     if (activeMenuItem && path.length) {
       return path.reverse().map((item, index) => {
         if (index === path.length - 1) {

@@ -39,6 +39,11 @@ const routes = [
   {
     path: '/campaigns',
     component: loadable(() => import('pages/campaigns')),
+    exact: true,
+  },
+  {
+    path: '/campaigns/:campaign',
+    component: loadable(() => import('pages/campaign-page')),
   },
 ]
 

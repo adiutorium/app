@@ -1,6 +1,7 @@
 import React from 'react'
 import { Progress } from 'antd'
 // import { Tooltip } from 'antd'
+import { Link } from 'react-router-dom'
 import data from './data.json'
 import styles from './style.module.scss'
 
@@ -34,13 +35,13 @@ class CampaignCard extends React.Component {
           <div className={styles.like}>
             <i className="icmn-heart" />
           </div>
-          <a href="javascript: void(0);">
+          <Link to="/campaigns/medical-john">
             <img src={productImg} alt="" />
-          </a>
+          </Link>
         </div>
 
         <div className={styles.title}>
-          <a href="javascript: void(0);">
+          <Link to="/campaigns/medical-john">
             {productName}
             <Progress
               percent={50}
@@ -50,7 +51,7 @@ class CampaignCard extends React.Component {
               width={50}
               className="ml-2"
             />
-          </a>
+          </Link>
           {/*<div className={styles.price}>*/}
           {/*  {productPrice}*/}
           {/*  <div className={styles.oldPrice}>{productOldPrice}</div>*/}
