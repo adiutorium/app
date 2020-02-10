@@ -80,7 +80,7 @@ class IndexLayout extends React.PureComponent {
 
     return (
       <Fragment>
-        <Helmet titleTemplate="Clean UI React Pro | %s" title="React Admin Template" />
+        <Helmet titleTemplate="EthDenver | %s" title="Front End App" />
         {BootstrappedLayout()}
       </Fragment>
     )
