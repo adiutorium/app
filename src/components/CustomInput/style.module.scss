@@ -1,0 +1,24 @@
+@import 'src/assets/styles/mixins';
+.customInput {
+  input,
+  input:focus,
+  .ant-input-group-addon,
+  .ant-select-selection,
+  textarea:focus,
+  textarea,
+  button.ant-btn,
+  input.ant-calendar-picker-input {
+    border: none;
+    border-radius: 0;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgb(217, 217, 217);
+  }
+
+  .ant-form-extra {
+    text-align: center;
+    font-size: 1.2rem;
+    //color: $title-blue;
+  }
+}

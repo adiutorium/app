@@ -1,0 +1,13 @@
+@import 'assets/styles/mixins.scss';
+.daiButton {
+  background: $dai-golden;
+  color: white;
+  outline: none;
+  border: none;
+  &:hover {
+    background: $dai-golden;
+    color: white;
+    outline: none;
+    border: none;
+  }
+}

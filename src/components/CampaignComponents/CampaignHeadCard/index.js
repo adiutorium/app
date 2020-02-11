@@ -4,6 +4,7 @@ import { user } from './data.json'
 
 import styles from './style.module.scss'
 import Avatar from '../../CleanUIComponents/Avatar'
+import DonorModal from '../DonorModal'
 
 class CampaignHeadCard extends React.Component {
   render() {
@@ -19,7 +20,7 @@ class CampaignHeadCard extends React.Component {
           <h2 className="text-white">
             <strong>Medical Relief for John</strong>
             <div className="float-right">
-              <Button className={`${styles.daiButton} mr-4`}>Donate</Button>
+              <DonorModal />
               <Button className={styles.daiButton}>Share</Button>
             </div>
           </h2>
