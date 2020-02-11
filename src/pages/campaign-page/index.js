@@ -71,7 +71,7 @@ function CampaignPage({ match }) {
       <div className="card">
         <div className="card-body">
           <div className="row">
-            <div className="col-xl-12">
+            <div className={`col-xl-12 mb-4 ${styles.bottomBorder}`}>
               <CampaignHeadCard />
             </div>
           </div>

@@ -1,5 +1,10 @@
+@import 'src/assets/styles/mixins';
 .panelHeader {
   font-size: 1.8rem;
   font-weight: bold;
   text-transform: capitalize;
+}
+
+.bottomBorder {
+  border-bottom: 1px solid $gray-border;
 }
