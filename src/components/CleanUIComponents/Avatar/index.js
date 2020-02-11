@@ -16,7 +16,7 @@ class Avatar extends React.Component {
         className={`${style.avatar} ${size ? style[`size${size}`] : ''} ${
           border ? style.border : ''
         }`}
-        href="javascript: void(0);"
+        href="/"
         style={{
           borderColor,
         }}

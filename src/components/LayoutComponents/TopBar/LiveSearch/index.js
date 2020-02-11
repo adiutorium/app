@@ -77,9 +77,10 @@ class LiveSearch extends React.Component {
           </button>
           <div className="container-fluid">
             <div className={styles.wrapper}>
-              <div className={styles.logoContainer}>
-                <img className={styles.logo} src="resources/images/logo.png" alt="" />
-              </div>
+              {/*TODO replace logo here*/}
+              {/*<div className={styles.logoContainer}>*/}
+              {/*  <img className={styles.logo} src="resources/images/logo.png" alt="" />*/}
+              {/*</div>*/}
               <input
                 type="search"
                 className={styles.searchInput}

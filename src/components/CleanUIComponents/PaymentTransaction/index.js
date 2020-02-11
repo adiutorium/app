@@ -7,6 +7,7 @@ class PaymentTransaction extends React.Component {
     amount: '',
     info: '',
     footer: '',
+    date: '',
   }
 
   componentWillMount() {
@@ -21,11 +22,11 @@ class PaymentTransaction extends React.Component {
   }
 
   render() {
-    const { income, amount, footer, info } = this.state
+    const { income, amount, footer, info, date } = this.state
 
     return (
       <a
-        href="javascript: void(0);"
+        href="/"
         className={`${styles.paymentTransaction} card card--withShadow ${
           income ? styles.income : ''
         }`}
@@ -39,7 +40,11 @@ class PaymentTransaction extends React.Component {
             {info && <sup className={styles.info}>{info}</sup>}
           </div>
         )}
-        {footer && <div className={styles.footer}>{footer}</div>}
+        {footer && (
+          <div className={styles.footer}>
+            {footer} <span className="float-right"> Transaction Date: {date}</span>{' '}
+          </div>
+        )}
       </a>
     )
   }

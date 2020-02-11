@@ -32,7 +32,7 @@ class ProgressCard extends React.Component {
           </div>
           {percent && (
             <div className={styles.lineDescr}>
-              <span>Change</span>
+              <span>Progress</span>
               <span>{`${percent}%`}</span>
             </div>
           )}

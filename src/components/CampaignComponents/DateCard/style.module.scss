@@ -5,9 +5,7 @@
   position: relative;
   transition: box-shadow 0.1s ease-in-out;
 
-  &:hover {
-    box-shadow: 0 0 2.25rem #e1e1e1;
-  }
+  box-shadow: 0 0 2.25rem #e1e1e1;
 }
 
 .icon {
