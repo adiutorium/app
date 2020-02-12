@@ -15,10 +15,18 @@
     box-shadow: none;
     border-bottom: 1px solid rgb(217, 217, 217);
   }
-
   .ant-form-extra {
     text-align: center;
     font-size: 1.2rem;
-    //color: $title-blue;
+  }
+}
+
+span.amountInput {
+  span.ant-input-wrapper.ant-input-group {
+    background: green !important;
+    span.ant-input-group-addon {
+      background: white !important;
+      border-top: 0 !important;
+    }
   }
 }

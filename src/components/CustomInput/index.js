@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input, Form } from 'antd'
-import styles from './style.module.scss'
+import './styles.scss'
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
  * @author [Pranav Singhal](https://github.com/pranav-singhal)
@@ -9,9 +9,11 @@ import styles from './style.module.scss'
 
 const { Item } = Form
 function CustomInput(props) {
+  console.log(props)
+  const { extra } = props
   return (
-    <div className={styles.customInput}>
-      <Item>
+    <div>
+      <Item className="customInput" extra={extra}>
         <Input {...props} />
       </Item>
     </div>
