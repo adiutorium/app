@@ -12,7 +12,7 @@ let CONTRACT
 
 // Token Contract 0xc2c65e3a70be4576e97938c944719ebc4f1569b4
 
-export function connectToMetamask(isMetamask) {
+export function initiateEthereumConnection(isMetamask) {
   return new Promise((resolve, reject) => {
     localStorage.clear()
     if (isMetamask) {

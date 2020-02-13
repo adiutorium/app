@@ -35,6 +35,8 @@ export const addPrivateProfileDataForSelf = (key, value) => {
 }
 
 export const addPublicAppDataForSelf = (key, value) => {
+  // campaign_<campaign_name>_<file-number>
+  // campaign_<campaign_name>
   return new Promise((resolve, reject) => {
     value = JSON.stringify(value)
     SPACE.public

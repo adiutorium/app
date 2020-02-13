@@ -1,18 +1,10 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import Authorize from 'components/LayoutComponents/Authorize'
-import { connectToMetamask } from '../../../ethereumConnections/web3'
-import { addPublicProfileDataForSelf } from '../../../ethereumConnections/3BoxHelper'
+// import { connectToMetamask } from '../../../ethereumConnections/web3'
+// import { addPublicProfileDataForSelf } from '../../../ethereumConnections/3BoxHelper'
 
 class DashboardAlpha extends React.Component {
-  componentDidMount() {
-    connectToMetamask(false).then(() => {
-      addPublicProfileDataForSelf('name', 'ArvindAcc2').then(() => {
-        console.log('stored')
-      })
-    })
-  }
-
   render() {
     return (
       <Authorize roles={['admin']} redirect to="/dashboard/beta">
