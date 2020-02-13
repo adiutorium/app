@@ -87,10 +87,14 @@ export const getPrivateProfileDataForSelf = key => {
 }
 
 export const getPublicAppDataForSelf = key => {
+  console.log(key)
   return new Promise((resolve, reject) => {
     SPACE.public
       .get(key)
-      .then(value => resolve(JSON.parse(value)))
+      .then(value => {
+        console.log(value)
+        resolve(JSON.parse(value))
+      })
       .catch(reject)
   })
 }
@@ -206,7 +210,8 @@ export const getPublicAppForOthers = ethereumAddress => {
 
 export const addPublicAppFile = (key, file) => {
   return readFileDataAsBase64(file).then(url => {
-    return addPublicProfileDataForSelf(key, url)
+    console.log('url====', url)
+    return addPublicAppDataForSelf(key, url)
   })
 }
 

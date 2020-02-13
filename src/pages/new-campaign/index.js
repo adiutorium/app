@@ -3,6 +3,7 @@ import { Button, Form, Input, Select, Upload, Icon, DatePicker } from 'antd'
 import CampaignSteps from '../../components/CampaignComponents/CampaignSteps'
 import './styles.scss'
 import Authorize from '../../components/LayoutComponents/Authorize'
+import { addPublicAppFile, getPublicAppDataForSelf } from '../../ethereumConnections/3BoxHelper'
 // steps for creating a campaign
 // name for the campaign
 // short description
@@ -12,8 +13,22 @@ import Authorize from '../../components/LayoutComponents/Authorize'
 // supporting documents
 // select vendors - from list or add your own
 
+function download(file) {
+  const element = document.createElement('a')
+  element.setAttribute('href', file.url)
+  element.setAttribute('download', file.name)
+
+  element.style.display = 'none'
+  document.body.appendChild(element)
+
+  element.click()
+
+  document.body.removeChild(element)
+}
+
 function CreateCampaign() {
-  const [current, setCurrent] = useState(0)
+  const [fileList, setFileList] = useState([])
+  const [current, setCurrent] = useState(1)
   const nextSection = () => setCurrent(current + 1)
   const prevSection = () => setCurrent(current - 1)
   // const buttonText = {
@@ -71,9 +86,60 @@ function CreateCampaign() {
                 className="document-upload mb-0"
                 wrapperCol={{ lg: 24 }}
               >
-                <Upload>
+                <Upload
+                  onPreview={file => {
+                    download(file)
+                  }}
+                  customRequest={({ file, onSuccess, onError }) => {
+                    const { uid, name } = file
+                    console.log(file)
+                    return addPublicAppFile('campaign_medical', file)
+                      .then(res => {
+                        console.log('file added', res)
+                        getPublicAppDataForSelf('campaign_medical')
+                          .then(result => {
+                            console.log('Result')
+                            console.log(result)
+                            const fileObj = {
+                              download: true,
+                              name,
+                              status: 'done',
+                              url: result,
+                              thumbUrl: result,
+                              key: uid,
+                              uid,
+                            }
+                            setFileList([...fileList, { ...fileObj }])
+                            onSuccess('Ok')
+                          })
+                          .catch(() => {
+                            onError('Oops')
+                          })
+                      })
+                      .catch(() => {
+                        onError('Oops')
+                      })
+                  }}
+                  fileList={fileList}
+                >
                   <Button>
-                    <Icon type="upload" /> Upload Documents
+                    <Icon
+                      type="upload"
+
+                      // customRequest={({file})=>{
+                      //     const {name,uid} = file
+                      //     return addPublicAppFile("campaign_medical",file)
+                      //     .then(() => {
+                      //       getPublicAppDataForSelf("campaign_medical").then(url => {
+                      //
+                      //       const fileObj = { name, status: 'done', url, key: uid, uid }
+                      //       setFileList([{...fileObj}])
+                      //
+                      //       })
+                      //     })
+                      // }}
+                    />{' '}
+                    Upload Documents
                   </Button>
                 </Upload>
               </Item>
