@@ -14,7 +14,6 @@ let CONTRACT
 
 export function initiateEthereumConnection(isMetamask) {
   return new Promise((resolve, reject) => {
-    localStorage.clear()
     if (isMetamask) {
       if (window.ethereum) {
         window.ethereum
@@ -61,7 +60,7 @@ export function initiateEthereumConnection(isMetamask) {
   })
 }
 
-export const connectToWalletConnect = async () => {
+const connectToWalletConnect = async () => {
   //  Create WalletConnect Provider
   const provider = new WalletConnectProvider({
     infuraId: 'ZWXhYfP2uIvdg1yKuQNY',
@@ -131,4 +130,25 @@ export const callTransaction = (functionName, ...args) => {
       .then(resolve)
       .catch(reject)
   })
+}
+
+export const startCampaign = (
+  donationTimeinSeconds,
+  spendTimeInSeconds,
+  requiredDonationAmount,
+  supportingDocumentsKey,
+  campaignType,
+  campaignName,
+  transactionHashCallBack,
+) => {
+  return sendTransaction(
+    'startCampaign',
+    transactionHashCallBack,
+    donationTimeinSeconds,
+    spendTimeInSeconds,
+    requiredDonationAmount,
+    supportingDocumentsKey,
+    campaignType,
+    campaignName,
+  )
 }
