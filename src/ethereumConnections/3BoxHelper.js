@@ -7,23 +7,11 @@ import { BoxAppName } from './config'
 let BOX
 let SPACE
 
-export const get3BoxProfileForAddress = (address, ethereumProvider) => {
-  return new Promise((resolve, reject) => {
-    Box.openBox(address, ethereumProvider)
-      .then(_box => {
-        BOX = _box
-        return BOX.syncDone
-      })
-      .then(() => {
-        return BOX.openSpace(BoxAppName)
-      })
-      .then(_space => {
-        SPACE = _space
-        return SPACE.syncDone
-      })
-      .then(() => resolve())
-      .catch(reject)
-  })
+export const get3BoxProfileForAddress = async (address, ethereumProvider) => {
+  BOX = await Box.openBox(address, ethereumProvider)
+  // await BOX.syncDone
+  SPACE = await BOX.openSpace(BoxAppName)
+  // await SPACE.syncDone
 }
 
 export const addPublicProfileDataForSelf = (key, value) => {
