@@ -8,10 +8,22 @@ let BOX
 let SPACE
 
 export const get3BoxProfileForAddress = async (address, ethereumProvider) => {
-  BOX = await Box.openBox(address, ethereumProvider)
-  // await BOX.syncDone
-  SPACE = await BOX.openSpace(BoxAppName)
-  // await SPACE.syncDone
+  return new Promise((resolve, reject) => {
+    Box.openBox(address, ethereumProvider)
+      .then(_box => {
+        BOX = _box
+        return BOX.syncDone
+      })
+      .then(() => {
+        return BOX.openSpace(BoxAppName)
+      })
+      .then(_space => {
+        SPACE = _space
+        return SPACE.syncDone
+      })
+      .then(resolve)
+      .catch(reject)
+  })
 }
 
 export const addPublicProfileDataForSelf = (key, value) => {
@@ -189,5 +201,26 @@ export const getPublicAppForOthers = ethereumAddress => {
         resolve(rv)
       })
       .catch(reject)
+  })
+}
+
+export const addPublicAppFile = (key, file) => {
+  return readFileDataAsBase64(file).then(url => {
+    return addPublicProfileDataForSelf(key, url)
+  })
+}
+
+function readFileDataAsBase64(e) {
+  const file = e
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = event => {
+      resolve(event.target.result)
+    }
+    reader.onerror = err => {
+      reject(err)
+    }
+    reader.readAsDataURL(file)
   })
 }
