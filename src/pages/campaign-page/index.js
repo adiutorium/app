@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Collapse, Icon } from 'antd'
+import { connect } from 'react-redux'
+import qs from 'qs'
 import { Helmet } from 'react-helmet/es/Helmet'
 import { withRouter } from 'react-router'
 import Authorize from '../../components/LayoutComponents/Authorize'
@@ -42,7 +44,7 @@ const donorData = [
   },
 ]
 
-function CampaignPage({ match }) {
+function CampaignPage({ match, dispatch, location }) {
   // const genExtra = () => (
   //   <Icon
   //     type="setting"
@@ -63,6 +65,27 @@ function CampaignPage({ match }) {
     percent: '78',
     dataColor: '#007bff',
   }
+  useEffect(() => {
+    const queryObj = qs.parse(location.search, { ignoreQueryPrefix: true })
+    if (queryObj.shareable) {
+      dispatch({
+        type: 'settings/CHANGE_SETTING',
+        payload: {
+          setting: 'isCampaignPage',
+          value: true,
+        },
+      })
+    } else {
+      dispatch({
+        type: 'settings/CHANGE_SETTING',
+        payload: {
+          setting: 'isCampaignPage',
+          value: false,
+        },
+      })
+    }
+  }, [])
+
   console.log(campaign)
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
@@ -179,5 +202,5 @@ function CampaignPage({ match }) {
     </Authorize>
   )
 }
-
-export default withRouter(CampaignPage)
+const mapStateToProps = ({ dispatch }) => ({ dispatch })
+export default connect(mapStateToProps)(withRouter(CampaignPage))

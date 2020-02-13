@@ -12,6 +12,7 @@ const STORED_SETTINGS = storedSettings => {
 
 const initialState = {
   ...STORED_SETTINGS({
+    isCampaignPage: false,
     isMobileView: false,
     isMobileMenuOpen: false,
     isLightTheme: true,

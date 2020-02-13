@@ -7,6 +7,7 @@ import MenuLeft from './MenuLeft'
 import MenuTop from './MenuTop'
 
 const mapStateToProps = ({ settings }) => ({
+  isCampaignPage: settings.isCampaignPage,
   isMenuTop: settings.isMenuTop,
   isMobileMenuOpen: settings.isMobileMenuOpen,
   isMobileView: settings.isMobileView,
@@ -34,7 +35,7 @@ class AppMenu extends React.Component {
   }
 
   render() {
-    const { isMenuTop, isMobileMenuOpen, isMobileView, isLightTheme } = this.props
+    const { isMenuTop, isMobileMenuOpen, isMobileView, isLightTheme, isCampaignPage } = this.props
     const BootstrappedMenu = () => {
       if (isMobileView) {
         return (
@@ -53,7 +54,7 @@ class AppMenu extends React.Component {
       if (isMenuTop) {
         return <MenuTop />
       }
-      return <MenuLeft />
+      return !isCampaignPage ? <MenuLeft /> : null
     }
 
     return BootstrappedMenu()
