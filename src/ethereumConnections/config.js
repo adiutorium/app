@@ -7,9 +7,27 @@ export const CONTRACT_ABI = [
     constant: true,
     inputs: [{ name: 'index', type: 'uint256' }],
     name: 'getNumberOfSpendings',
-    outputs: [{ name: 'numSpendings', type: 'uint256' }],
+    outputs: [
+      { name: 'numSpendings', type: 'uint256' },
+      { name: 'numSpendingsOpen', type: 'uint256' },
+    ],
     payable: false,
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: 'index', type: 'uint256' },
+      { name: 'to', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+      { name: 'receipt', type: 'string' },
+      { name: 'isOpen', type: 'bool' },
+    ],
+    name: 'spendDonations',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -20,12 +38,12 @@ export const CONTRACT_ABI = [
       { name: 'campaignName', type: 'string' },
       { name: 'owner', type: 'address' },
       { name: 'supportingDocuments', type: 'string' },
-      { name: 'totalDonation', type: 'uint256' },
-      { name: 'donationEndTime', type: 'uint256' },
-      { name: 'spendingEndTime', type: 'uint256' },
+      { name: 'totalDonations', type: 'uint256[2]' },
+      { name: 'times', type: 'uint256[2]' },
       { name: 'campaignType', type: 'string' },
       { name: 'requiredDonation', type: 'uint256' },
       { name: 'donors', type: 'address[]' },
+      { name: 'donorsOpen', type: 'address[]' },
     ],
     payable: false,
     stateMutability: 'view',
@@ -36,6 +54,7 @@ export const CONTRACT_ABI = [
     inputs: [
       { name: 'index', type: 'uint256' },
       { name: 'amount', type: 'uint256' },
+      { name: 'isOpen', type: 'bool' },
     ],
     name: 'donateTokens',
     outputs: [],
@@ -50,22 +69,6 @@ export const CONTRACT_ABI = [
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [
-      { name: 'campaignIndex', type: 'uint256' },
-      { name: 'spendingIndex', type: 'uint256' },
-    ],
-    name: 'getSpendingDetail',
-    outputs: [
-      { name: 'amount', type: 'uint256' },
-      { name: 'to', type: 'address' },
-      { name: 'receipt', type: 'string' },
-    ],
-    payable: false,
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -96,11 +99,31 @@ export const CONTRACT_ABI = [
   {
     constant: true,
     inputs: [
+      { name: 'campaignIndex', type: 'uint256' },
+      { name: 'spendingIndex', type: 'uint256' },
+      { name: 'isOpen', type: 'bool' },
+    ],
+    name: 'getSpendingDetail',
+    outputs: [
+      { name: 'amount', type: 'uint256' },
+      { name: 'to', type: 'address' },
+      { name: 'receipt', type: 'string' },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
       { name: 'index', type: 'uint256' },
       { name: 'donor', type: 'address' },
     ],
     name: 'getDonation',
-    outputs: [{ name: 'amount', type: 'uint256' }],
+    outputs: [
+      { name: 'amount', type: 'uint256' },
+      { name: 'amountOpen', type: 'uint256' },
+    ],
     payable: false,
     stateMutability: 'view',
     type: 'function',
@@ -109,20 +132,6 @@ export const CONTRACT_ABI = [
     constant: false,
     inputs: [{ name: 'index', type: 'uint256' }],
     name: 'endCampaign',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      { name: 'index', type: 'uint256' },
-      { name: 'to', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-      { name: 'receipt', type: 'string' },
-    ],
-    name: 'spendDonations',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
@@ -157,6 +166,6 @@ export const CONTRACT_ABI = [
   },
 ]
 
-export const CONTRACT_ADDRESS = '0x81981ba52ffcab402f08da33a834d16cad272f15'
+export const CONTRACT_ADDRESS = '0xBE1545a8CCe7319DD9ff0938Ff375b92cc770d92'
 
 export const BoxAppName = 'GoFundMeTrial'
