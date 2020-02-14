@@ -10,7 +10,7 @@ let web3
 let OWN_ADDRESS
 let CONTRACT
 
-// Token Contract 0xc2c65e3a70be4576e97938c944719ebc4f1569b4
+// Token Contract 0xaf6d060a29e3dfdcdd3e09c9518e5e74ece8ed26
 
 export function initiateEthereumConnection(isMetamask) {
   return new Promise((resolve, reject) => {
@@ -114,7 +114,9 @@ export const sendTransaction = (functionName, txHashCallBack, ...args) => {
     CONTRACT.methods[functionName](...args)
       .send({ from: OWN_ADDRESS })
       .on('transactionHash', function(hash) {
-        txHashCallBack(hash)
+        if (txHashCallBack) {
+          txHashCallBack(hash)
+        }
       })
       .on('receipt', function(receipt) {
         resolve(receipt)
@@ -211,6 +213,23 @@ export const getCampaignDetails = campaignIndex => {
           donorAddressesSpecific: campaignDetail.donors,
         }
         resolve(retValObject)
+      })
+      .catch(reject)
+  })
+}
+
+export const donateTokens = (campaignIndex, amount, isOpen, transactionHashCallback) => {
+  return sendTransaction('donateTokens', transactionHashCallback, campaignIndex, amount, isOpen)
+}
+
+export const getDonation = (campaignIndex, donorAddress) => {
+  return new Promise((resolve, reject) => {
+    callTransaction('getDonation', campaignIndex, donorAddress || OWN_ADDRESS)
+      .then(donationAmounts => {
+        resolve({
+          openDonation: donationAmounts.amountOpen,
+          specificDonation: donationAmounts.amount,
+        })
       })
       .catch(reject)
   })
