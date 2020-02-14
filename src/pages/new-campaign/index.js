@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
+import moment from 'moment'
 import { Button, Form, Input, Select, Upload, Icon, DatePicker } from 'antd'
 import CampaignSteps from '../../components/CampaignComponents/CampaignSteps'
 import './styles.scss'
 import Authorize from '../../components/LayoutComponents/Authorize'
-import { addPublicAppFile, getPublicAppDataForSelf } from '../../ethereumConnections/3BoxHelper'
+import {
+  addPublicAppDataForSelf,
+  addPublicAppFile,
+  getPublicAppDataForSelf,
+} from '../../ethereumConnections/3BoxHelper'
+import { startCampaign } from '../../ethereumConnections/web3'
 // steps for creating a campaign
 // name for the campaign
 // short description
@@ -26,10 +32,49 @@ function download(file) {
   document.body.removeChild(element)
 }
 
+const setDetailsObj = (filesArray, description) => {
+  const detailsObj = { file: [] }
+  // filesArray.forEach((file)=>{
+  //   detailsObj.file = [...detailsObj.file, file.name]
+  //
+  // })
+  filesArray = filesArray.map(e => e.name)
+  detailsObj.files = filesArray
+  detailsObj.description = description
+  return detailsObj
+}
+
 function CreateCampaign() {
   const [fileList, setFileList] = useState([])
-  const [current, setCurrent] = useState(1)
-  const nextSection = () => setCurrent(current + 1)
+  const [current, setCurrent] = useState(0)
+  const [campDetails, setCampDetails] = useState({})
+  const setFormData = (key, value) => {
+    setCampDetails({ ...campDetails, [key]: value })
+  }
+
+  const nextSection = () => {
+    if (current !== 2) {
+      setCurrent(current + 1)
+    } else {
+      console.log(fileList)
+      const detailsObject = setDetailsObj(fileList, campDetails.description)
+      addPublicAppDataForSelf('campaignName', detailsObject).then(res => {
+        if (res) {
+          startCampaign(
+            campDetails.donationTime,
+            campDetails.spendingTime,
+            campDetails.amount,
+            'campaignName',
+            campDetails.type,
+            campDetails.name,
+            txHash => {
+              console.log(txHash)
+            },
+          )
+        }
+      })
+    }
+  }
   const prevSection = () => setCurrent(current - 1)
   // const buttonText = {
   // TODO function to set Button Text
@@ -45,6 +90,7 @@ function CreateCampaign() {
             <div className="col-lg-6 offset-lg-4 mt-4 custom-input amount-input">
               <Item extra="Target Amount in Dai">
                 <Input
+                  onChange={e => setFormData('amount', parseInt(e.target.value, 10))}
                   type="number"
                   addonBefore="DAI"
                   addonAfter={<img src="/images/dai.svg" alt="dai" style={{ maxHeight: '60%' }} />}
@@ -53,13 +99,13 @@ function CreateCampaign() {
             </div>
             <div className="col-lg-6 offset-lg-4 custom-input">
               <Item extra="Campaign Name">
-                <Input type="text" />
+                <Input type="text" onChange={e => setFormData('name', e.target.value)} />
               </Item>
             </div>
 
             <div className="col-lg-6 offset-lg-4 custom-input">
               <Item extra="Choose a category">
-                <Select>
+                <Select onSelect={e => setFormData('type', e)}>
                   <Select.Option value="Medical"> Medical </Select.Option>
                 </Select>
               </Item>
@@ -75,6 +121,7 @@ function CreateCampaign() {
                 <Input.TextArea
                   type="textarea"
                   size="large"
+                  onChange={e => setFormData('description', e.target.value)}
                   rows={4}
                   placeholder="Tell people who you are, what do you need the money for ..."
                 />
@@ -92,17 +139,14 @@ function CreateCampaign() {
                   }}
                   customRequest={({ file, onSuccess, onError }) => {
                     const { uid, name } = file
-                    console.log(file)
-                    return addPublicAppFile('campaign_medical', file)
-                      .then(res => {
-                        console.log('file added', res)
+                    return addPublicAppFile(`campaignName_${name}`, file)
+                      .then(() => {
                         getPublicAppDataForSelf('campaign_medical')
                           .then(result => {
                             console.log('Result')
                             console.log(result)
                             const fileObj = {
-                              download: true,
-                              name,
+                              name: `campaignName_${name}`,
                               status: 'done',
                               url: result,
                               thumbUrl: result,
@@ -123,23 +167,7 @@ function CreateCampaign() {
                   fileList={fileList}
                 >
                   <Button>
-                    <Icon
-                      type="upload"
-
-                      // customRequest={({file})=>{
-                      //     const {name,uid} = file
-                      //     return addPublicAppFile("campaign_medical",file)
-                      //     .then(() => {
-                      //       getPublicAppDataForSelf("campaign_medical").then(url => {
-                      //
-                      //       const fileObj = { name, status: 'done', url, key: uid, uid }
-                      //       setFileList([{...fileObj}])
-                      //
-                      //       })
-                      //     })
-                      // }}
-                    />{' '}
-                    Upload Documents
+                    <Icon type="upload" /> Upload Documents
                   </Button>
                 </Upload>
               </Item>
@@ -152,12 +180,24 @@ function CreateCampaign() {
             <h4 className="mt-4 w-100">Campaign Dates</h4>
             <div className="col-lg-6 offset-lg-4 custom-input date-picker">
               <Item extra="Last date for accepting Funds" wrapperCol={{ lg: 16 }}>
-                <DatePicker />
+                <DatePicker
+                  onChange={e => {
+                    const diff = moment().diff(e, 'seconds')
+                    console.log(Math.abs(diff))
+                    setFormData('donationTime', diff)
+                  }}
+                />
               </Item>
             </div>
             <div className="col-lg-6 offset-lg-4 custom-input date-picker">
               <Item extra="Last date for spending Funds" wrapperCol={{ lg: 16 }}>
-                <DatePicker />
+                <DatePicker
+                  onChange={e => {
+                    const diff = moment().diff(e, 'seconds')
+                    console.log(Math.abs(diff))
+                    setFormData('spendingTime', diff)
+                  }}
+                />
               </Item>
             </div>
           </>

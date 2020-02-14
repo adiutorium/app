@@ -48,6 +48,7 @@
     "firebase": "^6.3.0",
     "history": "^4.9.0",
     "lodash": "^4.17.14",
+    "moment": "^2.24.0",
     "nprogress": "^0.2.0",
     "peity-react": "^0.0.7",
     "prop-types": "^15.7.2",
