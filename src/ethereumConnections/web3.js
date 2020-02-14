@@ -211,6 +211,7 @@ export const getCampaigns = campaignFoundCallback => {
                   campaignType: campaignDetail.campaignType,
                   donorAddressesOpen: campaignDetail.donorsOpen,
                   donorAddressesSpecific: campaignDetail.donors,
+                  id,
                 }
                 retValArray.push(retValObject)
                 if (campaignFoundCallback) {
