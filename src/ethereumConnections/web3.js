@@ -155,7 +155,6 @@ export const startCampaign = (
 
 export const getCampaigns = campaignFoundCallback => {
   return new Promise((resolve, reject) => {
-    console.log(campaignFoundCallback)
     callTransaction('getMyCampaigns')
       .then(campaignIds => {
         const promises = []
@@ -179,7 +178,9 @@ export const getCampaigns = campaignFoundCallback => {
                   donorAddressesSpecific: campaignDetail.donors,
                 }
                 retValArray.push(retValObject)
-                campaignFoundCallback(retValObject)
+                if (campaignFoundCallback) {
+                  campaignFoundCallback(retValObject)
+                }
               })
               .catch(reject),
           )

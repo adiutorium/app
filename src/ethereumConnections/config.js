@@ -5,6 +5,15 @@
 export const CONTRACT_ABI = [
   {
     constant: true,
+    inputs: [],
+    name: 'getTotalApprovalRequests',
+    outputs: [{ name: 'total', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
     inputs: [{ name: 'index', type: 'uint256' }],
     name: 'getNumberOfSpendings',
     outputs: [
@@ -98,6 +107,19 @@ export const CONTRACT_ABI = [
   },
   {
     constant: true,
+    inputs: [{ name: 'id', type: 'uint256' }],
+    name: 'getApprovalReqeustDetail',
+    outputs: [
+      { name: 'amount', type: 'uint256' },
+      { name: 'approved', type: 'bool' },
+      { name: 'spendReceipt', type: 'string' },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
     inputs: [
       { name: 'campaignIndex', type: 'uint256' },
       { name: 'spendingIndex', type: 'uint256' },
@@ -111,6 +133,15 @@ export const CONTRACT_ABI = [
     ],
     payable: false,
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [{ name: 'apporvalRequestId', type: 'uint256' }],
+    name: 'approveExpense',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -166,6 +197,6 @@ export const CONTRACT_ABI = [
   },
 ]
 
-export const CONTRACT_ADDRESS = '0xBE1545a8CCe7319DD9ff0938Ff375b92cc770d92'
+export const CONTRACT_ADDRESS = '0xfcC0029c78a04B24A3fb5E56FA11953f16eFC88e'
 
 export const BoxAppName = 'GoFundMeTrial'
