@@ -54,7 +54,9 @@ class AppMenu extends React.Component {
       if (isMenuTop) {
         return <MenuTop />
       }
-      return !isCampaignPage ? <MenuLeft /> : null
+      console.log(isCampaignPage)
+      // return !isCampaignPage ? <MenuLeft /> : null
+      return <MenuLeft />
     }
 
     return BootstrappedMenu()

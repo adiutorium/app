@@ -141,7 +141,7 @@ function CreateCampaign() {
                     const { uid, name } = file
                     return addPublicAppFile(`campaignName_${name}`, file)
                       .then(() => {
-                        getPublicAppDataForSelf('campaign_medical')
+                        getPublicAppDataForSelf(`campaignName_${name}`)
                           .then(result => {
                             console.log('Result')
                             console.log(result)
