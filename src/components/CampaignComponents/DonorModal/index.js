@@ -11,7 +11,7 @@ import DonorSteps from '../DonorSteps'
  */
 
 function DonorModal() {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const { Item } = Form
   const [current, setCurrent] = useState(0)
   const [donationDetails, setDonationDetails] = useState({ openDonation: 'false' })
