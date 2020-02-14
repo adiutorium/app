@@ -139,14 +139,15 @@ function CreateCampaign() {
                   }}
                   customRequest={({ file, onSuccess, onError }) => {
                     const { uid, name } = file
-                    return addPublicAppFile(`campaignName_${name}`, file)
+                    const campaignName = campDetails.name
+                    return addPublicAppFile(`${campaignName}_${name}`, file)
                       .then(() => {
-                        getPublicAppDataForSelf(`campaignName_${name}`)
+                        getPublicAppDataForSelf(`${campaignName}_${name}`)
                           .then(result => {
                             console.log('Result')
                             console.log(result)
                             const fileObj = {
-                              name: `campaignName_${name}`,
+                              name: `${campaignName}_${name}`,
                               status: 'done',
                               url: result,
                               thumbUrl: result,

@@ -13,7 +13,7 @@ import DonorSteps from '../DonorSteps'
 function DonorModal() {
   const [visible, setVisible] = useState(true)
   const { Item } = Form
-  const [current, setCurrent] = useState(1)
+  const [current, setCurrent] = useState(0)
   const getSteps = () => {
     switch (current) {
       case 0:
