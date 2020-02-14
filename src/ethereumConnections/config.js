@@ -47,7 +47,7 @@ export const CONTRACT_ABI = [
       { name: 'campaignName', type: 'string' },
       { name: 'owner', type: 'address' },
       { name: 'supportingDocuments', type: 'string' },
-      { name: 'totalDonations', type: 'uint256[2]' },
+      { name: 'totalDonations', type: 'uint256[4]' },
       { name: 'times', type: 'uint256[2]' },
       { name: 'campaignType', type: 'string' },
       { name: 'requiredDonation', type: 'uint256' },
@@ -197,6 +197,6 @@ export const CONTRACT_ABI = [
   },
 ]
 
-export const CONTRACT_ADDRESS = '0xfcC0029c78a04B24A3fb5E56FA11953f16eFC88e'
+export const CONTRACT_ADDRESS = '0x3F123637b3AE250b3D7d532d34184F19B137FC44'
 
 export const BoxAppName = 'GoFundMeTrial'
