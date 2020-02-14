@@ -9,7 +9,6 @@ import './styles.scss'
 
 const { Item } = Form
 function CustomInput(props) {
-  console.log(props)
   const { extra } = props
   return (
     <div>
