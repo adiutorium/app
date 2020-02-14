@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import moment from 'moment'
+// import moment from 'moment'
 import { Button, Form, Input, Select, Upload, Icon, DatePicker } from 'antd'
 import CampaignSteps from '../../components/CampaignComponents/CampaignSteps'
 import './styles.scss'
@@ -58,13 +58,13 @@ function CreateCampaign() {
     } else {
       console.log(fileList)
       const detailsObject = setDetailsObj(fileList, campDetails.description)
-      addPublicAppDataForSelf('campaignName', detailsObject).then(res => {
+      addPublicAppDataForSelf(campDetails.name, detailsObject).then(res => {
         if (res) {
           startCampaign(
             campDetails.donationTime,
             campDetails.spendingTime,
             campDetails.amount,
-            'campaignName',
+            campDetails.name,
             campDetails.type,
             campDetails.name,
             txHash => {
@@ -183,9 +183,9 @@ function CreateCampaign() {
               <Item extra="Last date for accepting Funds" wrapperCol={{ lg: 16 }}>
                 <DatePicker
                   onChange={e => {
-                    const diff = moment().diff(e, 'seconds')
-                    console.log(Math.abs(diff))
-                    setFormData('donationTime', diff)
+                    const endingTime = e.unix()
+                    console.log(endingTime)
+                    setFormData('donationTime', endingTime)
                   }}
                 />
               </Item>
@@ -194,9 +194,9 @@ function CreateCampaign() {
               <Item extra="Last date for spending Funds" wrapperCol={{ lg: 16 }}>
                 <DatePicker
                   onChange={e => {
-                    const diff = moment().diff(e, 'seconds')
-                    console.log(Math.abs(diff))
-                    setFormData('spendingTime', diff)
+                    const endingTime = e.unix()
+                    console.log(endingTime)
+                    setFormData('spendingTime', endingTime)
                   }}
                 />
               </Item>

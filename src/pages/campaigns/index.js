@@ -23,7 +23,7 @@ function AllCampaigns({ loading, campaigns }) {
             <div className="col-xl-4 col-lg-6 col-md-12">
               {!loading
                 ? campaigns.map(campaign => {
-                    return <CampaignCard {...campaign} />
+                    return <CampaignCard key={campaign.campaignName} {...campaign} />
                   })
                 : 'loading...'}
             </div>
