@@ -14,12 +14,17 @@ function DonorModal() {
   const [visible, setVisible] = useState(true)
   const { Item } = Form
   const [current, setCurrent] = useState(0)
+  const [donationDetails, setDonationDetails] = useState({ openDonation: 'false' })
+  const setFormData = (key, value) => {
+    setDonationDetails({ ...donationDetails, [key]: value })
+  }
   const getSteps = () => {
     switch (current) {
       case 0:
         return (
           <Form>
             <CustomInput
+              onChange={e => setFormData('donationAmount', e.target.value)}
               extra="Enter the amount you want to donate"
               className="amount-input"
               type="text"
@@ -29,7 +34,10 @@ function DonorModal() {
             />
 
             <Item extra="Open donations can only be spent by the campaign organisers on verified merchants for specific purposes">
-              <Checkbox> Is this an open donation?</Checkbox>
+              <Checkbox onChange={e => setFormData('openDonation', e.target.checked)}>
+                {' '}
+                Is this an open donation?
+              </Checkbox>
             </Item>
           </Form>
         )
@@ -63,11 +71,11 @@ function DonorModal() {
         <DonorSteps current={current} className="mb-5" />
         {getSteps()}
         <div>
-          <Button onClick={() => setCurrent(current + 1)} disabled={current === 1}>
-            Next Step
-          </Button>
           <Button onClick={() => setCurrent(current - 1)} disabled={current === 0}>
             Previous Step
+          </Button>
+          <Button onClick={() => setCurrent(current + 1)} disabled={current === 1}>
+            Next Step
           </Button>
         </div>
       </Modal>
