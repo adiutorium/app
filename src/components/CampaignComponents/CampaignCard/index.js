@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import data from './data.json'
 import styles from './style.module.scss'
 import { getPublicAppDataForSelf } from '../../../ethereumConnections/3BoxHelper'
+import { convertToHex } from '../../../helpers'
 
 function CampaignCard(props) {
   const [description, setDescription] = useState('')
@@ -17,6 +18,7 @@ function CampaignCard(props) {
     totalDonationOpen,
     totalDonationSpecific,
     requiredDonation,
+    id,
   } = props
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -55,6 +57,7 @@ function CampaignCard(props) {
     // productStatus,
   } = data
   console.log(props)
+  // id: "testing"
   // campaignName: "ethDenver"
   // ownerAddress: "0xD7F1a592874bbe5d14c3f024c08b630e6De5A11B"
   // supportingDocumentsKey: "ethDenver"
@@ -80,7 +83,7 @@ function CampaignCard(props) {
         <div className={styles.like}>
           <i className="icmn-heart" />
         </div>
-        <Link to="/campaigns/medical-john">
+        <Link to={`/campaigns/${convertToHex(id)}`}>
           <img src={productImg} alt="" />
         </Link>
       </div>

@@ -256,13 +256,19 @@ export const getCampaignDetails = campaignIndex => {
 
 export const donateTokens = (campaignIndex, amount, isOpen, transactionHashCallback) => {
   return new Promise((resolve, reject) => {
+    console.log(amount)
     callTransactionTokenContract('allowance', OWN_ADDRESS, GO_FUND_ME_CONTRACT_ADDRESS)
       .then(allowance => {
         let promise
         if (allowance >= amount) {
           promise = Promise.resolve()
         } else {
-          promise = sendTransactionTokenContract('approve', GO_FUND_ME_CONTRACT_ADDRESS, amount)
+          promise = sendTransactionTokenContract(
+            'approve',
+            () => {},
+            GO_FUND_ME_CONTRACT_ADDRESS,
+            amount,
+          )
         }
         return promise
       })

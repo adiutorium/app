@@ -11,6 +11,7 @@ import DateTab from '../../components/CampaignComponents/DateCard'
 import ProgressCard from '../../components/CleanUIComponents/ProgressCard'
 import CampaignLedger from '../../components/CampaignComponents/CampaignLedger'
 import styles from './style.module.scss'
+import { convertFromHex } from '../../helpers'
 
 const { Panel } = Collapse
 
@@ -95,7 +96,7 @@ function CampaignPage({ match, dispatch, location }) {
         <div className="card-body">
           <div className="row">
             <div className={`col-xl-12 mb-4 ${styles.bottomBorder}`}>
-              <CampaignHeadCard />
+              <CampaignHeadCard id={convertFromHex(campaign)} />
             </div>
           </div>
           <div className="row">
