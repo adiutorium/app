@@ -4,11 +4,17 @@
 import Web3 from 'web3'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { get3BoxProfileForAddress } from './3BoxHelper'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from './config'
+import {
+  GO_FUND_ME_CONTRACT_ABI,
+  GO_FUND_ME_CONTRACT_ADDRESS,
+  TOKEN_CONTRACT_ABI,
+  TOKEN_CONTRACT_ADDRESS,
+} from './config'
 
 let web3
 let OWN_ADDRESS
-let CONTRACT
+let GO_FUND_ME_CONTRACT
+let TOKEN_CONTRACT
 
 // Token Contract 0xaf6d060a29e3dfdcdd3e09c9518e5e74ece8ed26
 
@@ -104,14 +110,14 @@ const watchEvents = provider => {
 }
 
 const connectToContracts = resolve => {
-  CONTRACT = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
-  console.log(CONTRACT)
+  GO_FUND_ME_CONTRACT = new web3.eth.Contract(GO_FUND_ME_CONTRACT_ABI, GO_FUND_ME_CONTRACT_ADDRESS)
+  TOKEN_CONTRACT = new web3.eth.Contract(TOKEN_CONTRACT_ABI, TOKEN_CONTRACT_ADDRESS)
   resolve()
 }
 
-export const sendTransaction = (functionName, txHashCallBack, ...args) => {
+export const sendTransactionGoFundMe = (functionName, txHashCallBack, ...args) => {
   return new Promise((resolve, reject) => {
-    CONTRACT.methods[functionName](...args)
+    GO_FUND_ME_CONTRACT.methods[functionName](...args)
       .send({ from: OWN_ADDRESS })
       .on('transactionHash', function(hash) {
         if (txHashCallBack) {
@@ -125,9 +131,34 @@ export const sendTransaction = (functionName, txHashCallBack, ...args) => {
   })
 }
 
-export const callTransaction = (functionName, ...args) => {
+export const callTransactionGoFundMe = (functionName, ...args) => {
   return new Promise((resolve, reject) => {
-    CONTRACT.methods[functionName](...args)
+    GO_FUND_ME_CONTRACT.methods[functionName](...args)
+      .call({ from: OWN_ADDRESS })
+      .then(resolve)
+      .catch(reject)
+  })
+}
+
+export const sendTransactionTokenContract = (functionName, txHashCallBack, ...args) => {
+  return new Promise((resolve, reject) => {
+    TOKEN_CONTRACT.methods[functionName](...args)
+      .send({ from: OWN_ADDRESS })
+      .on('transactionHash', function(hash) {
+        if (txHashCallBack) {
+          txHashCallBack(hash)
+        }
+      })
+      .on('receipt', function(receipt) {
+        resolve(receipt)
+      })
+      .on('error', reject)
+  })
+}
+
+export const callTransactionTokenContract = (functionName, ...args) => {
+  return new Promise((resolve, reject) => {
+    TOKEN_CONTRACT.methods[functionName](...args)
       .call({ from: OWN_ADDRESS })
       .then(resolve)
       .catch(reject)
@@ -143,7 +174,7 @@ export const startCampaign = (
   campaignName,
   transactionHashCallBack,
 ) => {
-  return sendTransaction(
+  return sendTransactionGoFundMe(
     'startCampaign',
     transactionHashCallBack,
     donationTimeinSeconds,
@@ -157,14 +188,14 @@ export const startCampaign = (
 
 export const getCampaigns = campaignFoundCallback => {
   return new Promise((resolve, reject) => {
-    callTransaction('getMyCampaigns')
+    callTransactionGoFundMe('getMyCampaigns')
       .then(campaignIds => {
         const promises = []
         const retValArray = []
         campaignIds = campaignIds.map(e => parseInt(e, 10))
         campaignIds.forEach(id => {
           promises.push(
-            callTransaction('getCampaign', id)
+            callTransactionGoFundMe('getCampaign', id)
               .then(campaignDetail => {
                 const retValObject = {
                   campaignName: campaignDetail.campaignName,
@@ -199,7 +230,7 @@ export const getCampaigns = campaignFoundCallback => {
 
 export const getCampaignDetails = campaignIndex => {
   return new Promise((resolve, reject) => {
-    callTransaction('getCampaign', campaignIndex)
+    callTransactionGoFundMe('getCampaign', campaignIndex)
       .then(campaignDetail => {
         const retValObject = {
           campaignName: campaignDetail.campaignName,
@@ -223,12 +254,34 @@ export const getCampaignDetails = campaignIndex => {
 }
 
 export const donateTokens = (campaignIndex, amount, isOpen, transactionHashCallback) => {
-  return sendTransaction('donateTokens', transactionHashCallback, campaignIndex, amount, isOpen)
+  return new Promise((resolve, reject) => {
+    callTransactionTokenContract('allowance', OWN_ADDRESS, GO_FUND_ME_CONTRACT_ADDRESS)
+      .then(allowance => {
+        let promise
+        if (allowance >= amount) {
+          promise = Promise.resolve()
+        } else {
+          promise = sendTransactionTokenContract('approve', GO_FUND_ME_CONTRACT_ADDRESS, amount)
+        }
+        return promise
+      })
+      .then(() => {
+        return sendTransactionGoFundMe(
+          'donateTokens',
+          transactionHashCallback,
+          campaignIndex,
+          amount,
+          isOpen,
+        )
+      })
+      .then(resolve)
+      .catch(reject)
+  })
 }
 
 export const getDonation = (campaignIndex, donorAddress) => {
   return new Promise((resolve, reject) => {
-    callTransaction('getDonation', campaignIndex, donorAddress || OWN_ADDRESS)
+    callTransactionGoFundMe('getDonation', campaignIndex, donorAddress || OWN_ADDRESS)
       .then(donationAmounts => {
         resolve({
           openDonation: donationAmounts.amountOpen,
