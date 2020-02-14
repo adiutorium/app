@@ -191,3 +191,26 @@ export const getCampaigns = campaignFoundCallback => {
       .catch(reject)
   })
 }
+
+export const getCampaignDetails = campaignIndex => {
+  return new Promise((resolve, reject) => {
+    callTransaction('getCampaign', campaignIndex)
+      .then(campaignDetail => {
+        const retValObject = {
+          campaignName: campaignDetail.campaignName,
+          ownerAddress: campaignDetail.owner,
+          supportingDocumentsKey: campaignDetail.supportingDocuments,
+          totalDonationSpecific: parseInt(campaignDetail.totalDonations[0], 10),
+          totalDonationOpen: parseInt(campaignDetail.totalDonations[1], 10),
+          donationEndTime: parseInt(campaignDetail.times[0], 10),
+          spendingEndTime: parseInt(campaignDetail.times[1], 10),
+          requiredDonation: parseInt(campaignDetail.requiredDonation, 10),
+          campaignType: campaignDetail.campaignType,
+          donorAddressesOpen: campaignDetail.donorsOpen,
+          donorAddressesSpecific: campaignDetail.donors,
+        }
+        resolve(retValObject)
+      })
+      .catch(reject)
+  })
+}
