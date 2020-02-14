@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import Authorize from '../../components/LayoutComponents/Authorize'
 import CampaignCard from '../../components/CampaignComponents/CampaignCard'
@@ -8,7 +9,8 @@ import CampaignCard from '../../components/CampaignComponents/CampaignCard'
  * @createdOn   10-02-2020, 10:41
  */
 
-function AllCampaigns() {
+function AllCampaigns({ loading, campaigns }) {
+  console.log({ loading })
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
       <Helmet title="User Campaigns" />
@@ -19,7 +21,11 @@ function AllCampaigns() {
         <div className="card-body">
           <div className="row">
             <div className="col-xl-4 col-lg-6 col-md-12">
-              <CampaignCard />
+              {!loading
+                ? campaigns.map(campaign => {
+                    return <CampaignCard {...campaign} />
+                  })
+                : 'loading...'}
             </div>
           </div>
         </div>
@@ -28,4 +34,8 @@ function AllCampaigns() {
   )
 }
 
-export default AllCampaigns
+const mapStateToProps = ({ campaigns }) => ({
+  loading: campaigns.loading,
+  campaigns: campaigns.campaignList,
+})
+export default connect(mapStateToProps)(AllCampaigns)
