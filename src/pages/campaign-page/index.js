@@ -224,7 +224,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
                       >
                         <div className="row">
                           <div className="col-lg-12">
-                            <CampaignLedger />
+                            <CampaignLedger campaignId={convertFromHex(match.params.campaign)} />
                           </div>
                         </div>
                       </Panel>

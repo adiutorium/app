@@ -1,20 +1,24 @@
 import React from 'react'
 import PaymentTransaction from '../../CleanUIComponents/PaymentTransaction'
 import styles from './style.module.scss'
+import SpendDonations from '../SpendDonations'
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
  * @author [Pranav Singhal](https://github.com/pranav-singhal)
  * @createdOn   11-02-2020, 0:43
  */
 
-function CampaignLedger() {
+function CampaignLedger({ campaignId }) {
   return (
     <div>
       {/*<h1 className={styles.borderBottom}>*/}
 
       {/*</h1>*/}
       <div className="utils__title utils__title--flat mb-5">
-        <strong className="text-uppercase font-size-16 "> All Transactions</strong>
+        <strong className="text-uppercase font-size-16 ">
+          {' '}
+          All Transactions <SpendDonations campaignIndex={campaignId} />{' '}
+        </strong>
         <span className="float-right">
           <span className={`${styles.dai} font-size-16`}>500</span>{' '}
           <span className="text-muted font-size-10"> of 1000 Dai spent</span>
