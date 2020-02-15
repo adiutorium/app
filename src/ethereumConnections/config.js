@@ -140,6 +140,8 @@ export const GO_FUND_ME_CONTRACT_ABI = [
       { name: 'amount', type: 'uint256' },
       { name: 'approved', type: 'bool' },
       { name: 'spendReceipt', type: 'string' },
+      { name: 'campaignId', type: 'uint256' },
+      { name: 'senderAddress', type: 'address' },
     ],
     payable: false,
     stateMutability: 'view',
@@ -216,7 +218,7 @@ export const GO_FUND_ME_CONTRACT_ABI = [
   },
 ]
 
-export const GO_FUND_ME_CONTRACT_ADDRESS = '0xa83AE184763b2fF9A1ED575F57C2F0765ad7E172'
+export const GO_FUND_ME_CONTRACT_ADDRESS = '0x2EE7456476dc8e26b15d20Df00E751D7ef699BF4'
 
 export const TOKEN_CONTRACT_ABI = [
   {

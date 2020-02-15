@@ -321,3 +321,35 @@ export const spendDonations = (
 export const getOrganisationAddresses = () => {
   return callTransactionGoFundMe('getVerifiedAccounts')
 }
+
+export const getApprovalRequests = approvalRequestCallback => {
+  return new Promise((resolve, reject) => {
+    const rv = []
+    callTransactionGoFundMe('getTotalApprovalRequests')
+      .then(numberOfRequests => {
+        const promises = []
+        for (let i = 0; i < numberOfRequests; i += 1) {
+          promises.push(
+            callTransactionGoFundMe('getApprovalRequestDetail', i).then(detail => {
+              const rvObject = {
+                amount: detail.amount,
+                approved: detail.approved,
+                extraDataOn3Box: detail.spendReceipt,
+                campaignId: detail.campaignId,
+                senderAddress: detail.senderAddress,
+              }
+              rv.push(rvObject)
+              if (approvalRequestCallback) {
+                approvalRequestCallback(rvObject)
+              }
+            }),
+          )
+        }
+        return Promise.all(promises)
+      })
+      .then(() => {
+        resolve(rv)
+      })
+      .catch(reject)
+  })
+}
