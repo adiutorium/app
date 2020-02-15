@@ -337,6 +337,7 @@ export const getApprovalRequests = approvalRequestCallback => {
                 extraDataOn3Box: detail.spendReceipt,
                 campaignId: detail.campaignId,
                 senderAddress: detail.senderAddress,
+                requestId: i,
               }
               rv.push(rvObject)
               if (approvalRequestCallback) {
@@ -352,4 +353,8 @@ export const getApprovalRequests = approvalRequestCallback => {
       })
       .catch(reject)
   })
+}
+
+export const approveToGetTokens = (approvalRequestId, txHashCallBack) => {
+  return sendTransactionGoFundMe('approveExpense', txHashCallBack, approvalRequestId)
 }
