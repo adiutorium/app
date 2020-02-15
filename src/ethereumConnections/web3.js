@@ -358,3 +358,45 @@ export const getApprovalRequests = approvalRequestCallback => {
 export const approveToGetTokens = (approvalRequestId, txHashCallBack) => {
   return sendTransactionGoFundMe('approveExpense', txHashCallBack, approvalRequestId)
 }
+
+export const getSpending = campaignId => {
+  return new Promise((resolve, reject) => {
+    const types = []
+    callTransactionGoFundMe('getNumberOfSpendings', campaignId)
+      .then(spendings => {
+        const numSpecificSpent = spendings.numSpendings
+        const numOpenSpent = spendings.numSpendingsOpen
+        const promises = []
+        for (let i = 0; i < numOpenSpent; i += 1) {
+          types.push(true)
+          promises.push(callTransactionGoFundMe('getSpendingDetail', campaignId, i, true))
+        }
+        for (let i = 0; i < numSpecificSpent; i += 1) {
+          types.push(false)
+          promises.push(callTransactionGoFundMe('getSpendingDetail', campaignId, i, false))
+        }
+        return Promise.all(promises)
+      })
+      .then(spendingDetails => {
+        spendingDetails = spendingDetails.map((spending, index) => {
+          return {
+            index,
+            amount: spending.amount,
+            toAddress: spending.to,
+            keyFrom3Box: spending.receipt,
+            timestamp: spending.timestamp,
+            isOpen: types[index],
+          }
+        })
+        resolve(spendingDetails)
+      })
+      .catch(reject)
+  })
+}
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.union = function(y) {
+  const x = this
+  console.log(x)
+  return [...new Set([...x, ...y])]
+}

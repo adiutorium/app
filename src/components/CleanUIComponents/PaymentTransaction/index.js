@@ -3,7 +3,7 @@ import styles from './style.module.scss'
 
 class PaymentTransaction extends React.Component {
   state = {
-    income: false,
+    approved: false,
     amount: '',
     info: '',
     footer: '',
@@ -22,17 +22,21 @@ class PaymentTransaction extends React.Component {
   }
 
   render() {
-    const { income, amount, footer, info, date } = this.state
+    const { approved, amount, footer, info, date } = this.state
 
     return (
       <a
         href="/"
         className={`${styles.paymentTransaction} card card--withShadow ${
-          income ? styles.income : ''
+          approved ? styles.income : ''
         }`}
       >
         <div className={styles.icon}>
-          <i className={income ? 'lnr lnr-arrow-left' : 'lnr lnr-arrow-right'} />
+          {approved ? (
+            <span className={styles.green}>Approved</span>
+          ) : (
+            <span className="text-warning">Pending Approval</span>
+          )}
         </div>
         {amount && (
           <div>
@@ -42,7 +46,7 @@ class PaymentTransaction extends React.Component {
         )}
         {footer && (
           <div className={styles.footer}>
-            {footer} <span className="float-right"> Transaction Date: {date}</span>{' '}
+            {footer} {date && <span className="float-right"> Transaction Date: {date}</span>}
           </div>
         )}
       </a>

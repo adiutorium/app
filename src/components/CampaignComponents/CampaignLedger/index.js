@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import moment from 'moment'
 import PaymentTransaction from '../../CleanUIComponents/PaymentTransaction'
-import styles from './style.module.scss'
-import SpendDonations from '../SpendDonations'
+import { getSpending } from '../../../ethereumConnections/web3'
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
  * @author [Pranav Singhal](https://github.com/pranav-singhal)
@@ -9,35 +9,31 @@ import SpendDonations from '../SpendDonations'
  */
 
 function CampaignLedger({ campaignId }) {
+  const [spendings, setSpendings] = useState([])
+  useEffect(() => {
+    getSpending(campaignId).then(expenses => {
+      setSpendings([...expenses])
+    })
+  }, [campaignId])
   return (
     <div>
       {/*<h1 className={styles.borderBottom}>*/}
 
       {/*</h1>*/}
-      <div className="utils__title utils__title--flat mb-5">
-        <strong className="text-uppercase font-size-16 ">
-          {' '}
-          All Transactions <SpendDonations campaignIndex={campaignId} />{' '}
-        </strong>
-        <span className="float-right">
-          <span className={`${styles.dai} font-size-16`}>500</span>{' '}
-          <span className="text-muted font-size-10"> of 1000 Dai spent</span>
-        </span>
-      </div>
-      <PaymentTransaction
-        income={false}
-        amount="-100.00 DAI"
-        info="0x5a0b54d5dc17e0aadc383d2db43b0a0d3e029c4c"
-        footer="Spent at AMAZON Corp, NY, 1756"
-        date="15 Feb 2019"
-      />
-      <PaymentTransaction
-        income
-        amount="+27,080.00 DAI"
-        info="0x5a0b54d5dc17e0aadc383d2db43b0a0d3e029c4c"
-        footer="Received From DigitalOcean Cloud Hosting, Winna, LA"
-        date="15 Feb 2019"
-      />
+      {spendings.map(spending => (
+        <PaymentTransaction
+          key={spending.index}
+          approved={spending.timestamp !== '0'}
+          amount={`${spending.amount} DAI`}
+          info={spending.toAddress}
+          footer="Sent To DigitalOcean Cloud Hosting, Winna, LA"
+          date={
+            spending.timestamp !== '0'
+              ? moment.unix(spending.timestamp).format('D MMM YYYY')
+              : false
+          }
+        />
+      ))}
     </div>
   )
 }

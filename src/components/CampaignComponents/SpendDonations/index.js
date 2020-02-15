@@ -17,7 +17,7 @@ function SpendDonations({ campaignIndex }) {
   const [amount, setAmount] = useState(0)
   const openTransaction = e => {
     e.preventDefault()
-    spendDonations(campaignIndex, ethAddress, amount, '', false, txHash => {
+    spendDonations(campaignIndex, ethAddress, amount, '', true, txHash => {
       console.log(txHash)
     }).then(res => {
       console.log(res)
@@ -36,6 +36,7 @@ function SpendDonations({ campaignIndex }) {
         onOk={() => setVisible(false)}
         footer={false}
       >
+        {/* TODO add balances of each type of available donations to be spent */}
         <Collapse accordion defaultActiveKey={['1']}>
           <Panel key="1" header="Spend Open Funds">
             <div className="row">

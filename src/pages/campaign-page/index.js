@@ -13,8 +13,9 @@ import ProgressCard from '../../components/CleanUIComponents/ProgressCard'
 import CampaignLedger from '../../components/CampaignComponents/CampaignLedger'
 import styles from './style.module.scss'
 import { convertFromHex } from '../../helpers'
-import { getCampaignDetails } from '../../ethereumConnections/web3'
+import { getCampaignDetails, getDonation } from '../../ethereumConnections/web3'
 import { getPublicAppDataForSelf } from '../../ethereumConnections/3BoxHelper'
+import SpendDonations from '../../components/CampaignComponents/SpendDonations'
 
 const { Panel } = Collapse
 
@@ -59,7 +60,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
   //   />
   // );
   const [campaign, setCampaign] = useState('')
-  const [campaignDetails, setCampaignDetails] = useState({ progressItem: {} })
+  const [campaignDetails, setCampaignDetails] = useState({ progressItem: {}, donors: [] })
 
   useEffect(() => {
     const queryObj = qs.parse(location.search, { ignoreQueryPrefix: true })
@@ -87,6 +88,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
       let details
       let campaignId = match.params.campaign
       let files
+      let donors
       setCampaign(campaignId)
       campaignId = convertFromHex(campaignId)
       getCampaignDetails(campaignId)
@@ -110,7 +112,20 @@ function CampaignPage({ match, dispatch, location, loading }) {
           })
           details = calculateCampEndDate(details)
           details = calculateProgress(details)
-          setCampaignDetails({ ...details, files: urls })
+          details.files = urls
+          donors = details.donorAddressesOpen.union(details.donorAddressesSpecific)
+          const promises = donors.map(e => getDonation(campaignId, e))
+          return Promise.all(promises)
+        })
+        .then(donations => {
+          details.totalSpent = details.totalSpentOpen + details.totalSpentSpecific
+          details.donors = donations.map((donation, index) => {
+            return {
+              address: donors[index],
+              amount: parseInt(donation.openDonation, 10) + parseInt(donation.specificDonation, 10),
+            }
+          })
+          setCampaignDetails({ ...details })
         })
     }
   }, [loading])
@@ -218,13 +233,32 @@ function CampaignPage({ match, dispatch, location, loading }) {
                         </div>
                       </Panel>
                       <Panel
-                        header={<span className={styles.panelHeader}>Campaign Ledger</span>}
+                        header={
+                          <span className={styles.panelHeader}>
+                            {' '}
+                            All Transactions <SpendDonations campaignIndex={campaign} />{' '}
+                            <span className="float-right">
+                              <span className={`${styles.dai} font-size-16`}>
+                                {campaignDetails.totalSpent}
+                              </span>{' '}
+                              <span className="text-muted font-size-10">
+                                {' '}
+                                of{' '}
+                                {campaignDetails.totalDonationSpecific +
+                                  campaignDetails.totalDonationOpen}{' '}
+                                Dai spent
+                              </span>
+                            </span>
+                          </span>
+                        }
                         key="2"
-                        extra={<Icon type="fund" />}
                       >
                         <div className="row">
                           <div className="col-lg-12">
-                            <CampaignLedger campaignId={convertFromHex(match.params.campaign)} />
+                            <CampaignLedger
+                              campaignId={convertFromHex(match.params.campaign)}
+                              details={campaignDetails}
+                            />
                           </div>
                         </div>
                       </Panel>
@@ -252,29 +286,21 @@ function CampaignPage({ match, dispatch, location, loading }) {
                     </div>
                   </div>
                   <div className="card-body">
-                    {donorData.map(item => {
+                    {campaignDetails.donors.map(donor => {
                       const actionData = (
-                        <span style={{ color: item.actionDataColor }}>{item.actionData}</span>
+                        <span style={{ color: donorData[0].actionDataColor }}>{donor.amount}</span>
                       )
                       return (
                         <ShortItemInfo
-                          key={item.name}
-                          img={item.img}
-                          name={item.name}
-                          note={item.note}
+                          key={donorData[0].name}
+                          img={donorData[0].img}
+                          name={donorData[0].name}
+                          note={donor.address}
                           actionData={actionData}
                         />
                       )
                     })}
                   </div>
-                  {/*<div className="utils__chartist utils__chartist--danger">*/}
-                  {/*  <ChartistGraph*/}
-                  {/*    data={topPhotosGraphData}*/}
-                  {/*    options={boundChartistOptions}*/}
-                  {/*    type="Line"*/}
-                  {/*    className="height-300"*/}
-                  {/*  />*/}
-                  {/*</div>*/}
                 </div>
               </div>
             </div>

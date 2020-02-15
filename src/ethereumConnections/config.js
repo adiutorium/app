@@ -218,7 +218,7 @@ export const GO_FUND_ME_CONTRACT_ABI = [
   },
 ]
 
-export const GO_FUND_ME_CONTRACT_ADDRESS = '0x2EE7456476dc8e26b15d20Df00E751D7ef699BF4'
+export const GO_FUND_ME_CONTRACT_ADDRESS = '0x43B6DdE97D561014AdE08896abBb17c8Fe675b45'
 
 export const TOKEN_CONTRACT_ABI = [
   {
@@ -439,6 +439,6 @@ export const TOKEN_CONTRACT_ABI = [
   },
 ]
 
-export const TOKEN_CONTRACT_ADDRESS = '0xaf6d060a29e3dfdcdd3e09c9518e5e74ece8ed26'
+export const TOKEN_CONTRACT_ADDRESS = '0x0Cf554c54A606183365E8A6b5209280607Bd3eaA'
 
 export const BoxAppName = 'GoFundMeTrial'

@@ -3,14 +3,17 @@
 .paymentTransaction {
   padding: rem(15) rem(25);
   position: relative;
-  border-left: 4px solid $danger !important;
+  border-left: 4px solid $warning !important;
 }
 
 .income {
   border-left: 4px solid $success !important;
 
   .icon {
-    i {
+    .red {
+      color: $danger !important;
+    }
+    .green {
       color: $success;
     }
   }
