@@ -6,8 +6,7 @@ import styles from './style.module.scss'
 import Avatar from '../../CleanUIComponents/Avatar'
 import DonorModal from '../DonorModal'
 
-function CampaignHeadCard({ id }) {
-  console.log('id======', id)
+function CampaignHeadCard({ id, campaignDetails: { campaignName, description } }) {
   return (
     <div className={styles.card}>
       {/* TODO - change user.cover */}
@@ -18,7 +17,7 @@ function CampaignHeadCard({ id }) {
         }}
       >
         <h2 className="text-white">
-          <strong>Medical Relief for John</strong>
+          <strong>{campaignName}</strong>
           <div className="float-right">
             <DonorModal id={id} />
             <Button className={styles.daiButton}>Share</Button>
@@ -34,7 +33,7 @@ function CampaignHeadCard({ id }) {
           </p>
         </div>
         <div className={styles.right}>
-          <p>{user.description}</p>
+          <p>{description}</p>
         </div>
       </div>
     </div>

@@ -87,12 +87,10 @@ export const getPrivateProfileDataForSelf = key => {
 }
 
 export const getPublicAppDataForSelf = key => {
-  console.log(key)
   return new Promise((resolve, reject) => {
     SPACE.public
       .get(key)
       .then(value => {
-        console.log(value)
         resolve(JSON.parse(value))
       })
       .catch(reject)

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
-import { Collapse, Icon } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Collapse, Icon, Upload } from 'antd'
 import { connect } from 'react-redux'
 import qs from 'qs'
 import { Helmet } from 'react-helmet/es/Helmet'
 import { withRouter } from 'react-router'
+import moment from 'moment'
 import Authorize from '../../components/LayoutComponents/Authorize'
 import CampaignHeadCard from '../../components/CampaignComponents/CampaignHeadCard'
 import ShortItemInfo from '../../components/CleanUIComponents/ShortItemInfo'
@@ -12,6 +13,8 @@ import ProgressCard from '../../components/CleanUIComponents/ProgressCard'
 import CampaignLedger from '../../components/CampaignComponents/CampaignLedger'
 import styles from './style.module.scss'
 import { convertFromHex } from '../../helpers'
+import { getCampaignDetails } from '../../ethereumConnections/web3'
+import { getPublicAppDataForSelf } from '../../ethereumConnections/3BoxHelper'
 
 const { Panel } = Collapse
 
@@ -55,17 +58,9 @@ function CampaignPage({ match, dispatch, location, loading }) {
   //     }}
   //   />
   // );
+  const [campaign, setCampaign] = useState('')
+  const [campaignDetails, setCampaignDetails] = useState({ progressItem: {} })
 
-  const {
-    params: { campaign },
-  } = match
-  const progressItem = {
-    title: 'Total Funds ',
-    note: 'of 1000 Dai Raised',
-    currentValue: 'DAI 18M',
-    percent: '78',
-    dataColor: '#007bff',
-  }
   useEffect(() => {
     const queryObj = qs.parse(location.search, { ignoreQueryPrefix: true })
     if (queryObj.shareable) {
@@ -89,12 +84,80 @@ function CampaignPage({ match, dispatch, location, loading }) {
 
   useEffect(() => {
     if (!loading) {
-      //TODO add code to fetch campaign data
+      let details
+      let campaignId = match.params.campaign
+      let files
+      setCampaign(campaignId)
+      campaignId = convertFromHex(campaignId)
+      getCampaignDetails(campaignId)
+        .then(_details => {
+          details = _details
+          return getPublicAppDataForSelf(details.supportingDocumentsKey)
+        })
+        .then(result => {
+          files = [...result.files]
+          const promises = result.files.map(e => getPublicAppDataForSelf(e))
+          details.description = result.description
+          return Promise.all(promises)
+        })
+        .then(urls => {
+          urls = urls.map((e, index) => {
+            return {
+              url: e,
+              name: files[index],
+              uid: index,
+            }
+          })
+          details = calculateCampEndDate(details)
+          details = calculateProgress(details)
+          setCampaignDetails({ ...details, files: urls })
+        })
     }
   }, [loading])
 
-  console.log(campaign)
-  console.log('...............', loading)
+  const calculateCampEndDate = details => {
+    const date = moment.unix(details.donationEndTime).format('D MMM YYYY')
+    const diff = moment.unix(details.donationEndTime).diff(moment())
+    // const diff = date.diff(moment())
+    details.donationEndTime = date
+    if (diff > 0) {
+      details.donationEndTimeTitle = 'Ends On'
+    }
+    if (diff <= 0) {
+      details.donationEndTimeTitle = 'Ended On'
+    }
+    return details
+  }
+
+  const calculateProgress = details => {
+    const progress = (
+      ((details.totalDonationOpen + details.totalDonationSpecific) * 100) /
+      details.requiredDonation
+    ).toFixed(2)
+
+    details.progressItem = {
+      title: 'Total Funds ',
+      note: `of ${details.requiredDonation} Dai Raised`,
+      currentValue: `DAI ${details.totalDonationOpen + details.totalDonationSpecific}`,
+      percent: progress,
+      dataColor: '#007bff',
+    }
+    return details
+  }
+
+  function download(file) {
+    const element = document.createElement('a')
+    element.setAttribute('href', file.url)
+    element.setAttribute('download', file.name)
+
+    element.style.display = 'none'
+    document.body.appendChild(element)
+
+    element.click()
+
+    document.body.removeChild(element)
+  }
+
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
       <Helmet title={campaign} />
@@ -105,7 +168,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
           <div className="card-body">
             <div className="row">
               <div className={`col-xl-12 mb-4 ${styles.bottomBorder}`}>
-                <CampaignHeadCard id={convertFromHex(campaign)} />
+                <CampaignHeadCard id={convertFromHex(campaign)} campaignDetails={campaignDetails} />
               </div>
             </div>
             <div className="row">
@@ -123,8 +186,8 @@ function CampaignPage({ match, dispatch, location, loading }) {
                     <DateTab
                       icon="lnr lnr-inbox"
                       number="IBAN 445646-8748-4664-1678-5416"
-                      title="Ending On"
-                      date="15 Feb 2022"
+                      title={campaignDetails.donationEndTimeTitle || ''}
+                      date={campaignDetails.donationEndTime || ''}
                     />
                   </div>
                 </div>
@@ -144,7 +207,15 @@ function CampaignPage({ match, dispatch, location, loading }) {
                           />
                         }
                       >
-                        <div> testing</div>
+                        <div>
+                          <Upload
+                            onPreview={file => {
+                              download(file)
+                            }}
+                            fileList={campaignDetails.files}
+                            listType="picture-card"
+                          />
+                        </div>
                       </Panel>
                       <Panel
                         header={<span className={styles.panelHeader}>Campaign Ledger</span>}
@@ -167,11 +238,11 @@ function CampaignPage({ match, dispatch, location, loading }) {
                 </div>
 
                 <ProgressCard
-                  title={progressItem.title}
-                  note={progressItem.note}
-                  currentValue={progressItem.currentValue}
-                  percent={progressItem.percent}
-                  dataColor={progressItem.dataColor}
+                  title={campaignDetails.progressItem.title || ''}
+                  note={campaignDetails.progressItem.note || ''}
+                  currentValue={campaignDetails.progressItem.currentValue || ''}
+                  percent={campaignDetails.progressItem.percent || ''}
+                  dataColor={campaignDetails.progressItem.dataColor || ''}
                 />
 
                 <div className="card graphCard ">
