@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Button } from 'antd'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import styles from './style.module.scss'
 
 @withRouter
@@ -42,17 +42,17 @@ class LoginLayout extends React.PureComponent {
           >
             <div className={styles.header}>
               <div className={styles.logo}>
-                <Link to="/">
-                  {!backgroundEnabled && (
-                    <img src="resources/images/logo.png" alt="Clean UI React Admin Template" />
-                  )}
-                  {backgroundEnabled && (
-                    <img
-                      src="resources/images/logo-inverse.png"
-                      alt="Clean UI React Admin Template"
-                    />
-                  )}
-                </Link>
+                {/*<Link to="/">*/}
+                {/*  {!backgroundEnabled && (*/}
+                {/*    <img src="resources/images/logo.png" alt="Clean UI React Admin Template" />*/}
+                {/*  )}*/}
+                {/*  {backgroundEnabled && (*/}
+                {/*    <img*/}
+                {/*      src="resources/images/logo-inverse.png"*/}
+                {/*      alt="Clean UI React Admin Template"*/}
+                {/*    />*/}
+                {/*  )}*/}
+                {/*</Link>*/}
               </div>
               <div className={styles.controls}>
                 <div className="d-inline-block mr-3">
@@ -104,7 +104,6 @@ class LoginLayout extends React.PureComponent {
                   <a href="javascript: void(0);">Contacts</a>
                 </li>
               </ul>
-              <p>&copy; 2019 Mediatec. All rights reserved.</p>
             </div>
           </div>
         </Layout.Content>

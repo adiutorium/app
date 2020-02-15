@@ -20,6 +20,7 @@ class Authorize extends React.Component {
         })
         return <Redirect to={to} />
       }
+
       // if user not authorized return null to component
       if (!authorized) {
         return null

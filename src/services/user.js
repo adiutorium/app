@@ -51,3 +51,13 @@ export async function logout() {
     .signOut()
     .then(() => true)
 }
+
+export function getUserTypeUrl(userType) {
+  console.log('getUserType called', userType)
+  switch (userType) {
+    case 'organisation':
+      return '/organisations/ethHospital'
+    default:
+      return '/campaigns'
+  }
+}

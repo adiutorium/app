@@ -2,10 +2,11 @@ import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import Loadable from 'react-loadable'
-
+import { connect } from 'react-redux'
 import Loader from 'components/LayoutComponents/Loader'
 import IndexLayout from 'layouts'
 import NotFoundPage from 'pages/404'
+import { getUserTypeUrl } from './services/user'
 
 const loadable = loader =>
   Loadable({
@@ -51,14 +52,19 @@ const routes = [
   },
 ]
 
+const mapStateToProps = ({ user }) => {
+  return { userType: user.userType }
+}
+@connect(mapStateToProps)
 class Router extends React.Component {
   render() {
-    const { history } = this.props
+    const { history, userType } = this.props
+    const to = getUserTypeUrl(userType)
     return (
       <ConnectedRouter history={history}>
         <IndexLayout>
           <Switch>
-            <Route exact path="/" render={() => <Redirect to="/dashboard/alpha" />} />
+            <Route exact path="/" render={() => <Redirect to={to} />} />
             {routes.map(route => (
               <Route
                 path={route.path}

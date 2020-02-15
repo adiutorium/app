@@ -400,3 +400,7 @@ Array.prototype.union = function(y) {
   console.log(x)
   return [...new Set([...x, ...y])]
 }
+
+export const getUserAddress = () => {
+  return OWN_ADDRESS
+}

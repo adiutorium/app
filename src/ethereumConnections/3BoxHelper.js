@@ -176,31 +176,26 @@ export const getAllPublicAppDataForSelf = () => {
 
 export const getPublicProfileForOthers = ethereumAddress => {
   return new Promise((resolve, reject) => {
-    BOX.getProfile(ethereumAddress)
-      .then(data => {
-        delete data.proof_did
-        const dataKeys = Object.keys(data)
-        const rv = {}
-        dataKeys.forEach(key => {
-          rv[key] = JSON.parse(data[key])
+    setTimeout(() => {
+      Box.getProfile(ethereumAddress)
+        .then(data => {
+          resolve(data)
         })
-        resolve(rv)
-      })
-      .catch(reject)
+        .catch(reject)
+    }, 2000)
+
+    // BOX.onSyncDone(syncDone =>{
+    //   console.log(syncDone)
+    //
+    // })
   })
 }
 
 export const getPublicAppForOthers = ethereumAddress => {
   return new Promise((resolve, reject) => {
-    BOX.getSpace(ethereumAddress, BoxAppName)
+    Box.getSpace(ethereumAddress, BoxAppName)
       .then(data => {
-        delete data.proof_did
-        const dataKeys = Object.keys(data)
-        const rv = {}
-        dataKeys.forEach(key => {
-          rv[key] = JSON.parse(data[key])
-        })
-        resolve(rv)
+        resolve(data)
       })
       .catch(reject)
   })
@@ -226,4 +221,12 @@ function readFileDataAsBase64(e) {
     }
     reader.readAsDataURL(file)
   })
+}
+
+export function getBox() {
+  return BOX
+}
+
+export function getSpace() {
+  return SPACE
 }

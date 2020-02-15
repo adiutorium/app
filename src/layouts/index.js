@@ -7,6 +7,7 @@ import Loader from 'components/LayoutComponents/Loader'
 import PublicLayout from './Public'
 import LoginLayout from './Login'
 import MainLayout from './Main'
+import { getUserTypeUrl } from '../services/user'
 
 const Layouts = {
   public: PublicLayout,
@@ -33,6 +34,7 @@ class IndexLayout extends React.PureComponent {
       location: { pathname, search },
       user,
     } = this.props
+    const { userType } = user
 
     // NProgress Management
     const currentPath = pathname + search
@@ -72,7 +74,8 @@ class IndexLayout extends React.PureComponent {
       }
       // redirect to main dashboard when user on login page and authorized
       if (isLoginLayout && isUserAuthorized) {
-        return <Redirect to="/dashboard/alpha" />
+        const to = getUserTypeUrl(userType)
+        return <Redirect to={to} />
       }
       // in other case render previously set layout
       return <Container>{children}</Container>

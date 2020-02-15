@@ -26,6 +26,9 @@ export function* CONNECT_WEB3() {
     type: 'campaigns/SET_STATE',
     payload: { loading: false },
   })
+  yield put({
+    type: 'user/LOAD_CURRENT_ACCOUNT',
+  })
 }
 
 export default function* rootSaga() {
