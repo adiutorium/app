@@ -23,6 +23,7 @@ const initialState = {
     isSquaredBorders: false,
     isFixedWidth: false,
     isMenuShadow: true,
+    isOrganisationPage: false,
     locale: 'en-US',
   }),
 }

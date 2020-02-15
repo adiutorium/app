@@ -45,6 +45,10 @@ const routes = [
     path: '/campaigns/:campaign',
     component: loadable(() => import('pages/campaign-page')),
   },
+  {
+    path: '/organisations/:organisationName',
+    component: loadable(() => import('pages/organisation/organisation-page')),
+  },
 ]
 
 class Router extends React.Component {

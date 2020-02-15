@@ -12,6 +12,7 @@ const mapStateToProps = ({ settings }) => ({
   isMobileMenuOpen: settings.isMobileMenuOpen,
   isMobileView: settings.isMobileView,
   isLightTheme: settings.isLightTheme,
+  isOrganisationPage: settings.isOrganisationPage,
 })
 
 @withRouter
@@ -35,8 +36,17 @@ class AppMenu extends React.Component {
   }
 
   render() {
-    const { isMenuTop, isMobileMenuOpen, isMobileView, isLightTheme, isCampaignPage } = this.props
+    const {
+      isMenuTop,
+      isMobileMenuOpen,
+      isMobileView,
+      isLightTheme,
+      isOrganisationPage,
+    } = this.props
     const BootstrappedMenu = () => {
+      if (isOrganisationPage) {
+        return null
+      }
       if (isMobileView) {
         return (
           <DrawerMenu
@@ -54,8 +64,7 @@ class AppMenu extends React.Component {
       if (isMenuTop) {
         return <MenuTop />
       }
-      console.log(isCampaignPage)
-      // return !isCampaignPage ? <MenuLeft /> : null
+
       return <MenuLeft />
     }
 

@@ -5,6 +5,7 @@ import { history, store as reduxStore } from 'index'
 import actions from './actions'
 
 export function* CHANGE_SETTING({ payload: { setting, value } }) {
+  console.log('setting!!!!!!!!', setting)
   yield store.set(`app.settings.${setting}`, value)
   yield put({
     type: 'settings/SET_STATE',
@@ -16,8 +17,17 @@ export function* CHANGE_SETTING({ payload: { setting, value } }) {
 
 export function* SETUP() {
   // load settings from url on app load
+  reduxStore.dispatch({
+    type: 'settings/CHANGE_SETTING',
+    payload: {
+      setting: 'isOrganisationPage',
+      value: false,
+    },
+  })
+
   const changeSettings = search => {
     const query = qs.parse(search, { ignoreQueryPrefix: true })
+
     Object.keys(query).forEach(key => {
       reduxStore.dispatch({
         type: 'settings/CHANGE_SETTING',
