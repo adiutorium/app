@@ -33,6 +33,12 @@ export async function getLeftMenuData() {
       url: '/campaigns',
       icon: 'icmn icmn-home',
     },
+    {
+      title: 'Your organisations',
+      key: 'allOrganisations',
+      url: '/organisations',
+      icon: 'icmn icmn-home',
+    },
   ]
 }
 export async function getTopMenuData() {

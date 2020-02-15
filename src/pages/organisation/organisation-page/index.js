@@ -31,6 +31,7 @@ function OrganisationPage({ dispatch, loading }) {
     if (!loading) {
       getApprovalRequests(approval => {
         setapprovals([...approvals, approval])
+        console.log(approval)
       })
     }
   }, [loading])
@@ -44,13 +45,6 @@ function OrganisationPage({ dispatch, loading }) {
       <div className="row">
         <div className="col-lg-4">
           {approvals.map(({ amount, senderAddress, approved, requestId }) => {
-            // console.log(approval)
-            // amount: "3"
-            // approved: false
-            // extraDataOn3Box: ""
-            // campaignId: "1"
-            // senderAddress: "0xD7F1a592874bbe5d14c3f024c08b630e6De5A11B"
-            // requestId: 0
             return (
               <PaymentCard
                 key={requestId.toString()}
