@@ -106,16 +106,12 @@ export const GO_FUND_ME_CONTRACT_ABI = [
     type: 'function',
   },
   {
-    constant: true,
-    inputs: [{ name: 'id', type: 'uint256' }],
-    name: 'getApprovalReqeustDetail',
-    outputs: [
-      { name: 'amount', type: 'uint256' },
-      { name: 'approved', type: 'bool' },
-      { name: 'spendReceipt', type: 'string' },
-    ],
+    constant: false,
+    inputs: [{ name: 'toAdd', type: 'address' }],
+    name: 'addVerifiedAccount',
+    outputs: [],
     payable: false,
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -130,6 +126,20 @@ export const GO_FUND_ME_CONTRACT_ABI = [
       { name: 'amount', type: 'uint256' },
       { name: 'to', type: 'address' },
       { name: 'receipt', type: 'string' },
+      { name: 'timestamp', type: 'uint256' },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [{ name: 'id', type: 'uint256' }],
+    name: 'getApprovalRequestDetail',
+    outputs: [
+      { name: 'amount', type: 'uint256' },
+      { name: 'approved', type: 'bool' },
+      { name: 'spendReceipt', type: 'string' },
     ],
     payable: false,
     stateMutability: 'view',
@@ -169,6 +179,15 @@ export const GO_FUND_ME_CONTRACT_ABI = [
     type: 'function',
   },
   {
+    constant: true,
+    inputs: [],
+    name: 'getVerifiedAccounts',
+    outputs: [{ name: 'organisations', type: 'address[]' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ name: 'erc20Address', type: 'address' }],
     payable: false,
     stateMutability: 'nonpayable',
@@ -197,7 +216,7 @@ export const GO_FUND_ME_CONTRACT_ABI = [
   },
 ]
 
-export const GO_FUND_ME_CONTRACT_ADDRESS = '0xF81B60EB3F6AE7f1312aa8ff0D6fF9ebC6afA689'
+export const GO_FUND_ME_CONTRACT_ADDRESS = '0x51Fdf1ecD7b21b39C4DC88D1d897908619448e06'
 
 export const TOKEN_CONTRACT_ABI = [
   {

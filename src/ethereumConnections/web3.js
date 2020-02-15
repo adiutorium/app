@@ -298,3 +298,26 @@ export const getDonation = (campaignIndex, donorAddress) => {
       .catch(reject)
   })
 }
+
+export const spendDonations = (
+  campaignIndex,
+  toAddress,
+  amount,
+  extraDataOn3Box,
+  isOpen,
+  txHashCallback,
+) => {
+  return sendTransactionGoFundMe(
+    'spendDonations',
+    txHashCallback,
+    campaignIndex,
+    toAddress,
+    amount,
+    extraDataOn3Box,
+    isOpen,
+  )
+}
+
+export const getOrganisationAddresses = () => {
+  return callTransactionGoFundMe('getVerifiedAccounts')
+}
