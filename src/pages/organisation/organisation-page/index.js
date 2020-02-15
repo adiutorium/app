@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+// import { Button } from 'antd'
 import Authorize from '../../../components/LayoutComponents/Authorize'
+import PaymentCard from '../../../components/CleanUIComponents/PaymentCard'
+import { getApprovalRequests } from '../../../ethereumConnections/web3'
 
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
@@ -8,7 +11,12 @@ import Authorize from '../../../components/LayoutComponents/Authorize'
  * @createdOn   14-02-2020, 16:28
  */
 
-function OrganisationPage({ dispatch }) {
+// amount, approved(boolean), 3boxKey,campaignId,from
+// TODO - add campaign link
+// TODO - add purpose
+function OrganisationPage({ dispatch, loading }) {
+  const [approvals, setapprovals] = useState([])
+  console.log(approvals, setapprovals)
   useEffect(() => {
     dispatch({
       type: 'settings/CHANGE_SETTING',
@@ -19,11 +27,52 @@ function OrganisationPage({ dispatch }) {
     })
   }, [])
 
+  useEffect(() => {
+    if (!loading) {
+      getApprovalRequests(approval => {
+        setapprovals([...approvals, approval])
+      })
+    }
+  }, [loading])
+
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
-      This is sparta
+      <div className="utils__title utils__title--flat mb-3">
+        <strong className="text-uppercase font-size-16">Your Requests (3)</strong>
+        {/*<Button className="ml-3">View All</Button>*/}
+      </div>
+      <div className="row">
+        <div className="col-lg-4">
+          {approvals.map(({ amount, senderAddress, approved, requestId }) => {
+            // console.log(approval)
+            // amount: "3"
+            // approved: false
+            // extraDataOn3Box: ""
+            // campaignId: "1"
+            // senderAddress: "0xD7F1a592874bbe5d14c3f024c08b630e6De5A11B"
+            // requestId: 0
+            return (
+              <PaymentCard
+                key={requestId.toString()}
+                requestId={requestId}
+                icon="lnr lnr-bookmark"
+                name={senderAddress}
+                number={senderAddress}
+                approved={approved}
+                // type="VISA"
+                footer={
+                  <p>
+                    Purpose: <br /> Medical Expenses for John&apos;s heart surgery
+                  </p>
+                }
+                sum={`${amount} DAI`}
+              />
+            )
+          })}
+        </div>
+      </div>
     </Authorize>
   )
 }
-const mapStateToProps = ({ dispatch }) => ({ dispatch })
+const mapStateToProps = ({ dispatch, campaigns }) => ({ dispatch, loading: campaigns.loading })
 export default connect(mapStateToProps)(OrganisationPage)

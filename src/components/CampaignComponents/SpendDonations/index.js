@@ -17,7 +17,7 @@ function SpendDonations({ campaignIndex }) {
   const [amount, setAmount] = useState(0)
   const openTransaction = e => {
     e.preventDefault()
-    spendDonations(campaignIndex, ethAddress, amount, '', true, txHash => {
+    spendDonations(campaignIndex, ethAddress, amount, '', false, txHash => {
       console.log(txHash)
     }).then(res => {
       console.log(res)
@@ -78,7 +78,31 @@ function SpendDonations({ campaignIndex }) {
             </div>
           </Panel>
           <Panel key="2" header="Spend Bound Funds">
-            testing also
+            <div className="row">
+              <div className="col-lg-12">
+                <CustomInput
+                  value={amount}
+                  onChange={e => setAmount(e.target.value)}
+                  extra="Enter the amount you want to spend"
+                  className="amount-input"
+                  type="number"
+                  placeholder="Amount in DAI"
+                  addonBefore="DAI"
+                  addonAfter={<img src="/images/dai.svg" alt="dai" style={{ maxHeight: '60%' }} />}
+                />
+                <div className="customInput">
+                  <Input.TextArea
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)}
+                    className="custom-input"
+                    type="textarea"
+                    size="large"
+                    rows={4}
+                    placeholder="Additional Notes"
+                  />
+                </div>
+              </div>
+            </div>
           </Panel>
         </Collapse>
       </Modal>
