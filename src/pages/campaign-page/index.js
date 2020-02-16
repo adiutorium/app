@@ -14,7 +14,7 @@ import CampaignLedger from '../../components/CampaignComponents/CampaignLedger'
 import styles from './style.module.scss'
 import { convertFromHex } from '../../helpers'
 import { getCampaignDetails, getDonation } from '../../ethereumConnections/web3'
-import { getPublicAppDataForSelf } from '../../ethereumConnections/3BoxHelper'
+import { getPublicAppDataWithKey } from '../../ethereumConnections/3BoxHelper'
 import SpendDonations from '../../components/CampaignComponents/SpendDonations'
 
 const { Panel } = Collapse
@@ -94,11 +94,11 @@ function CampaignPage({ match, dispatch, location, loading }) {
       getCampaignDetails(campaignId)
         .then(_details => {
           details = _details
-          return getPublicAppDataForSelf(details.supportingDocumentsKey)
+          return getPublicAppDataWithKey(_details.ownerAddress, details.supportingDocumentsKey)
         })
         .then(result => {
           files = [...result.files]
-          const promises = result.files.map(e => getPublicAppDataForSelf(e))
+          const promises = result.files.map(e => getPublicAppDataWithKey(details.ownerAddress, e))
           details.description = result.description
           return Promise.all(promises)
         })
@@ -125,6 +125,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
               amount: parseInt(donation.openDonation, 10) + parseInt(donation.specificDonation, 10),
             }
           })
+          details.donors = details.donors.sort((a, b) => b.amount - a.amount)
           setCampaignDetails({ ...details })
         })
     }

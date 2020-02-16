@@ -174,6 +174,20 @@ export const getAllPublicAppDataForSelf = () => {
   })
 }
 
+export const getPublicAppDataWithKey = (ethereumAddress, key) => {
+  return new Promise((resolve, reject) => {
+    Box.getSpace(ethereumAddress, BoxAppName)
+      .then(data => {
+        if (data[key]) {
+          resolve(JSON.parse(data[key]))
+        } else {
+          resolve({})
+        }
+      })
+      .catch(reject)
+  })
+}
+
 export const getPublicProfileForOthers = ethereumAddress => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
