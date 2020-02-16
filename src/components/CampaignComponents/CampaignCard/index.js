@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 // import data from './data.json'
 import styles from './style.module.scss'
 import { getPublicAppDataForSelf } from '../../../ethereumConnections/3BoxHelper'
+import { convertToHex } from '../../../helpers'
 // import { convertToHex } from '../../../helpers'
 
 function CampaignCard(props) {
@@ -18,7 +19,7 @@ function CampaignCard(props) {
     totalDonationOpen,
     totalDonationSpecific,
     requiredDonation,
-    // id,
+    id,
   } = props
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -74,20 +75,8 @@ function CampaignCard(props) {
 
   return (
     <div className={styles.productCard}>
-      <div className={styles.img}>
-        {/*{productStatus === 'new' && (*/}
-        {/*  <div className={styles.status}>*/}
-        {/*    <span className={styles.statusTitle}>New</span>*/}
-        {/*  </div>*/}
-        {/*)}*/}
-
-        {/*<Link to={`/campaigns/${convertToHex(id)}`}>*/}
-        {/*  <img src={productImg} alt="" />*/}
-        {/*</Link>*/}
-      </div>
-
       <div className={styles.title}>
-        <Link to="/campaigns/medical-john">
+        <Link to={`/campaigns/${convertToHex(id)}`}>
           {campaignName}
           <Progress
             percent={progress}

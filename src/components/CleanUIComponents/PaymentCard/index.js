@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styles from './style.module.scss'
 import { approveToGetTokens } from '../../../ethereumConnections/web3'
 
-function PaymentCard({ number, footer, sum, approved, requestId }) {
+function PaymentCard({ number, footer, sum, approved, requestId, name }) {
   const [isApproved, setIsApproved] = useState(approved)
   const handleClick = e => {
     e.preventDefault()
@@ -20,7 +20,8 @@ function PaymentCard({ number, footer, sum, approved, requestId }) {
       {/*    <i className={icon} />*/}
       {/*  </div>*/}
       {/*)}*/}
-      <p className="text-muted text-center mb-0">Sent By:</p>
+      <p className="text-muted text-center mb-0">Sent By: </p>
+      {name && <span className={styles.name}>{name}</span>}
       {/*{name && <span className={styles.name}>{name}</span>}*/}
       {number && <span className={styles.number}>{number}</span>}
       {isApproved ? (

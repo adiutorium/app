@@ -397,6 +397,16 @@ export const getSpending = campaignId => {
   })
 }
 
+export const getBalance = () => {
+  return new Promise((resolve, reject) => {
+    callTransactionTokenContract('balanceOf', OWN_ADDRESS)
+      .then(balance => {
+        resolve(balance)
+      })
+      .catch(reject)
+  })
+}
+
 // eslint-disable-next-line no-extend-native
 Array.prototype.union = function(y) {
   const x = this

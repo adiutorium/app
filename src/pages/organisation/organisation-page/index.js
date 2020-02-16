@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-// import { Button } from 'antd'
 import Authorize from '../../../components/LayoutComponents/Authorize'
 import PaymentCard from '../../../components/CleanUIComponents/PaymentCard'
 import { getApprovalRequests } from '../../../ethereumConnections/web3'
+import { getPublicProfileForOthers } from '../../../ethereumConnections/3BoxHelper'
 
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
@@ -31,8 +31,11 @@ function OrganisationPage({ dispatch, loading }) {
     if (!loading) {
       const tempApprovals = approvals
       getApprovalRequests(approval => {
-        tempApprovals.push(approval)
-        setapprovals([...tempApprovals])
+        getPublicProfileForOthers(approval.senderAddress).then(profile => {
+          approval.name = profile.name
+          tempApprovals.push(approval)
+          setapprovals([...tempApprovals])
+        })
         console.log(approval)
       })
     }
@@ -45,13 +48,13 @@ function OrganisationPage({ dispatch, loading }) {
         {/*<Button className="ml-3">View All</Button>*/}
       </div>
       <div className="row">
-        {approvals.map(({ amount, senderAddress, approved, requestId, extraDataOn3Box }) => {
+        {approvals.map(({ amount, senderAddress, approved, requestId, extraDataOn3Box, name }) => {
           return (
             <div className="col-lg-4" key={requestId.toString()}>
               <PaymentCard
                 requestId={requestId}
                 icon="lnr lnr-bookmark"
-                name={senderAddress}
+                name={name}
                 number={senderAddress}
                 approved={approved}
                 // type="VISA"
