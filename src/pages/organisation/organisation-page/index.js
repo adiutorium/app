@@ -45,11 +45,10 @@ function OrganisationPage({ dispatch, loading }) {
         {/*<Button className="ml-3">View All</Button>*/}
       </div>
       <div className="row">
-        {approvals.map(({ amount, senderAddress, approved, requestId }) => {
+        {approvals.map(({ amount, senderAddress, approved, requestId, extraDataOn3Box }) => {
           return (
-            <div className="col-lg-4">
+            <div className="col-lg-4" key={requestId.toString()}>
               <PaymentCard
-                key={requestId.toString()}
                 requestId={requestId}
                 icon="lnr lnr-bookmark"
                 name={senderAddress}
@@ -58,7 +57,7 @@ function OrganisationPage({ dispatch, loading }) {
                 // type="VISA"
                 footer={
                   <p>
-                    Purpose: <br /> Medical Expenses for John&apos;s heart surgery
+                    Purpose: <br /> {extraDataOn3Box || '_'}
                   </p>
                 }
                 sum={`${amount} DAI`}

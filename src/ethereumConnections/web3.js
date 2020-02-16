@@ -19,7 +19,6 @@ let TOKEN_CONTRACT
 // Token Contract 0xaf6d060a29e3dfdcdd3e09c9518e5e74ece8ed26
 
 export function initiateEthereumConnection(isMetamask) {
-
   return new Promise((resolve, reject) => {
     if (isMetamask) {
       if (window.ethereum) {
@@ -29,7 +28,9 @@ export function initiateEthereumConnection(isMetamask) {
             // eslint-disable-next-line prefer-destructuring
             OWN_ADDRESS = address[0]
             web3 = new Web3(window.ethereum)
-            console.log("initiateEthereumConnection initiateEthereumConnection initiateEthereumConnection")
+            console.log(
+              'initiateEthereumConnection initiateEthereumConnection initiateEthereumConnection',
+            )
             return get3BoxProfileForAddress(OWN_ADDRESS, window.ethereum)
           })
           .then(() => {
@@ -330,7 +331,7 @@ export const getApprovalRequests = approvalRequestCallback => {
     callTransactionGoFundMe('getTotalApprovalRequests')
       .then(numberOfRequests => {
         const promises = []
-        for (let i = 0; i < numberOfRequests; i += 1) {
+        for (let i = numberOfRequests - 1; i >= 0; i -= 1) {
           promises.push(
             callTransactionGoFundMe('getApprovalRequestDetail', i).then(detail => {
               const rvObject = {
