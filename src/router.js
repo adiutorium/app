@@ -24,6 +24,11 @@ const routes = [
     exact: true,
   },
   {
+    path: '/user/edit-profile',
+    component: loadable(() => import('pages/user/login')),
+    exact: true,
+  },
+  {
     path: '/user/forgot',
     component: loadable(() => import('pages/user/forgot')),
     exact: true,
@@ -43,6 +48,7 @@ const routes = [
     component: loadable(() => import('pages/campaigns')),
     exact: true,
   },
+
   {
     path: '/campaigns/:campaign',
     component: loadable(() => import('pages/campaign-page')),
