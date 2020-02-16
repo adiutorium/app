@@ -36,16 +36,16 @@
 .img {
   position: relative;
   text-align: center;
-  height: rem(250);
+  //height: rem(250);
   overflow: hidden;
   a {
     display: block;
-    img {
-      min-height: rem(250);
-      max-height: rem(250);
-      max-width: 100%;
-      transition: transform 0.4s ease-in-out;
-    }
+    //img {
+    //  min-height: rem(250);
+    //  max-height: rem(250);
+    //  max-width: 100%;
+    //  transition: transform 0.4s ease-in-out;
+    //}
     &:hover {
       img {
         transform: scale(1.1);
@@ -58,8 +58,9 @@
   font-size: rem(16);
   text-transform: uppercase;
   font-weight: bold;
-  border-top: 1px solid $gray-border;
-  padding-top: rem(15);
+  border-bottom: 1px solid $gray-border;
+
+  padding-bottom: rem(15);
   //padding-right: rem(100);
   position: relative;
   a {

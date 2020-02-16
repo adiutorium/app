@@ -20,13 +20,15 @@ function AllCampaigns({ loading, campaigns }) {
       <div className="card">
         <div className="card-body">
           <div className="row">
-            <div className="col-xl-4 col-lg-6 col-md-12">
-              {!loading
-                ? campaigns.map(campaign => {
-                    return <CampaignCard key={campaign.campaignName} {...campaign} />
-                  })
-                : 'loading...'}
-            </div>
+            {!loading
+              ? campaigns.map(campaign => {
+                  return (
+                    <div className="col-xl-4 col-lg-6 col-md-12">
+                      <CampaignCard key={campaign.campaignName} {...campaign} />
+                    </div>
+                  )
+                })
+              : 'loading...'}
           </div>
         </div>
       </div>
@@ -34,7 +36,7 @@ function AllCampaigns({ loading, campaigns }) {
   )
 }
 
-const mapStateToProps = ({ user,campaigns }) => ({
+const mapStateToProps = ({ user, campaigns }) => ({
   loading: user.loading,
   campaigns: campaigns.campaignList,
 })

@@ -3,10 +3,10 @@ import { Progress } from 'antd'
 import moment from 'moment'
 // import { Tooltip } from 'antd'
 import { Link } from 'react-router-dom'
-import data from './data.json'
+// import data from './data.json'
 import styles from './style.module.scss'
 import { getPublicAppDataForSelf } from '../../../ethereumConnections/3BoxHelper'
-import { convertToHex } from '../../../helpers'
+// import { convertToHex } from '../../../helpers'
 
 function CampaignCard(props) {
   const [description, setDescription] = useState('')
@@ -18,7 +18,7 @@ function CampaignCard(props) {
     totalDonationOpen,
     totalDonationSpecific,
     requiredDonation,
-    id,
+    // id,
   } = props
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -48,14 +48,14 @@ function CampaignCard(props) {
     // setProgress()
   }
 
-  const {
-    productImg,
-    // productName,
-    // productPrice,
-    // productOldPrice,
-    // productNote,
-    // productStatus,
-  } = data
+  // const {
+  //   // productImg,
+  //   // productName,
+  //   // productPrice,
+  //   // productOldPrice,
+  //   // productNote,
+  //   // productStatus,
+  // } = data
   console.log(props)
   // id: "testing"
   // campaignName: "ethDenver"
@@ -80,12 +80,10 @@ function CampaignCard(props) {
         {/*    <span className={styles.statusTitle}>New</span>*/}
         {/*  </div>*/}
         {/*)}*/}
-        <div className={styles.like}>
-          <i className="icmn-heart" />
-        </div>
-        <Link to={`/campaigns/${convertToHex(id)}`}>
-          <img src={productImg} alt="" />
-        </Link>
+
+        {/*<Link to={`/campaigns/${convertToHex(id)}`}>*/}
+        {/*  <img src={productImg} alt="" />*/}
+        {/*</Link>*/}
       </div>
 
       <div className={styles.title}>
