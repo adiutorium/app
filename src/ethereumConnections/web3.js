@@ -310,6 +310,7 @@ export const spendDonations = (
   isOpen,
   txHashCallback,
 ) => {
+  console.log(campaignIndex, toAddress, amount, extraDataOn3Box, isOpen)
   return sendTransactionGoFundMe(
     'spendDonations',
     txHashCallback,

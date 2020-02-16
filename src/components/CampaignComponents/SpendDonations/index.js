@@ -3,6 +3,7 @@ import { Button, Collapse, Form, Input, Modal, Select } from 'antd'
 import CustomInput from '../../CustomInput'
 import { getOrganisationAddresses, spendDonations } from '../../../ethereumConnections/web3'
 import { getPublicProfileForOthers } from '../../../ethereumConnections/3BoxHelper'
+import { convertFromHex } from '../../../helpers'
 
 const { Option } = Select
 /**
@@ -21,7 +22,6 @@ function SpendDonations({ campaignIndex, details }) {
 
   useEffect(() => {
     let addresses
-    console.log(organisationOptions)
     getOrganisationAddresses()
       .then(_addresses => {
         addresses = _addresses
@@ -41,11 +41,20 @@ function SpendDonations({ campaignIndex, details }) {
       })
   }, [])
 
+  console.log(details)
+
   const openTransaction = (e, isOpen) => {
     e.preventDefault()
-    spendDonations(campaignIndex, ethAddress, amount, notes, isOpen, txHash => {
-      console.log(txHash)
-    }).then(res => {
+    spendDonations(
+      convertFromHex(campaignIndex),
+      ethAddress,
+      parseInt(amount, 10),
+      notes,
+      isOpen,
+      txHash => {
+        console.log(txHash)
+      },
+    ).then(res => {
       console.log(res)
     })
   }
@@ -69,7 +78,11 @@ function SpendDonations({ campaignIndex, details }) {
       >
         {/* TODO add balances of each type of available donations to be spent */}
         <Collapse accordion defaultActiveKey={['1']}>
-          <Panel key="1" header={`Spend Open Funds  (Balance : ${details.totalSpentOpen})`}>
+          <Panel
+            key="1"
+            header={`Spend Open Funds  (Balance : ${details.totalDonationOpen -
+              details.totalSpentOpen})`}
+          >
             <div className="row">
               <div className="col-lg-12">
                 <Form onSubmit={e => openTransaction(e, true)}>
@@ -108,7 +121,11 @@ function SpendDonations({ campaignIndex, details }) {
               </div>
             </div>
           </Panel>
-          <Panel key="2" header={`Spend Bound Funds  (Balance : ${details.totalSpentSpecific})`}>
+          <Panel
+            key="2"
+            header={`Spend Bound Funds  (Balance : ${details.totalDonationSpecific -
+              details.totalSpentSpecific})`}
+          >
             <div className="row">
               <div className="col-lg-12">
                 <Form onSubmit={e => openTransaction(e, false)}>
