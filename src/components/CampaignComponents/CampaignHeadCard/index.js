@@ -6,7 +6,7 @@ import styles from './style.module.scss'
 import Avatar from '../../CleanUIComponents/Avatar'
 import DonorModal from '../DonorModal'
 
-function CampaignHeadCard({ id, campaignDetails: { campaignName, description } }) {
+function CampaignHeadCard({ id, campaignDetails: { campaignName, description }, profile }) {
   return (
     <div className={styles.card}>
       {/* TODO - change user.cover */}
@@ -26,8 +26,8 @@ function CampaignHeadCard({ id, campaignDetails: { campaignName, description } }
       </div>
       <div>
         <div className={styles.left}>
-          <Avatar src={user.avatar} size="90" borderColor="white" border />
-          <strong className="d-block">{user.name}</strong>
+          <Avatar src={profile.avatar} size="90" borderColor="white" border />
+          <strong className="d-block">{profile.name}</strong>
           <p className="text-muted text-center">
             Organiser <br /> and <br /> Beneficiary
           </p>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import PaymentTransaction from '../../CleanUIComponents/PaymentTransaction'
 import { getSpending } from '../../../ethereumConnections/web3'
+import { getPublicProfileForOthers } from '../../../ethereumConnections/3BoxHelper'
 /**
  * @author Pranav Singhal <pranavsinghal96@gmail.com>
  * @author [Pranav Singhal](https://github.com/pranav-singhal)
@@ -11,9 +12,21 @@ import { getSpending } from '../../../ethereumConnections/web3'
 function CampaignLedger({ campaignId }) {
   const [spendings, setSpendings] = useState([])
   useEffect(() => {
-    getSpending(campaignId).then(expenses => {
-      setSpendings([...expenses])
-    })
+    let expenses
+    getSpending(campaignId)
+      .then(_expenses => {
+        expenses = _expenses
+        const promises = expenses.map(e => getPublicProfileForOthers(e.toAddress))
+        return Promise.all(promises)
+      })
+      .then(organisationNames => {
+        expenses = expenses.map((e, index) => {
+          e.toName =
+            (organisationNames[index] && organisationNames[index].name) || 'Unknown Address'
+          return e
+        })
+        setSpendings([...expenses])
+      })
   }, [campaignId])
   return (
     <div>
@@ -26,7 +39,7 @@ function CampaignLedger({ campaignId }) {
           approved={spending.timestamp !== '0'}
           amount={`${spending.amount} DAI`}
           info={spending.toAddress}
-          footer="Sent To DigitalOcean Cloud Hosting, Winna, LA"
+          footer={`Sent To ${spending.toName}`}
           date={
             spending.timestamp !== '0'
               ? moment.unix(spending.timestamp).format('D MMM YYYY')

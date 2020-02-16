@@ -13,7 +13,7 @@ const { Option } = Select
 
 // campaign index, toAddress, amount, isOpen, extradataon3box
 
-function SpendDonations({ campaignIndex }) {
+function SpendDonations({ campaignIndex, details }) {
   const [ethAddress, setEthAddress] = useState('')
   const [notes, setNotes] = useState('')
   const [amount, setAmount] = useState(0)
@@ -69,7 +69,7 @@ function SpendDonations({ campaignIndex }) {
       >
         {/* TODO add balances of each type of available donations to be spent */}
         <Collapse accordion defaultActiveKey={['1']}>
-          <Panel key="1" header="Spend Open Funds">
+          <Panel key="1" header={`Spend Open Funds  (Balance : ${details.totalSpentOpen})`}>
             <div className="row">
               <div className="col-lg-12">
                 <Form onSubmit={e => openTransaction(e, true)}>
@@ -108,7 +108,7 @@ function SpendDonations({ campaignIndex }) {
               </div>
             </div>
           </Panel>
-          <Panel key="2" header="Spend Bound Funds">
+          <Panel key="2" header={`Spend Bound Funds  (Balance : ${details.totalSpentSpecific})`}>
             <div className="row">
               <div className="col-lg-12">
                 <Form onSubmit={e => openTransaction(e, false)}>
