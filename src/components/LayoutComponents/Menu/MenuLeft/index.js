@@ -211,7 +211,7 @@ class MenuLeft extends React.Component {
             {/*  src={`resources/images/logo-inverse${menuSettings.collapsed ? '-mobile' : ''}.png`}*/}
             {/*  alt=""*/}
             {/*/>*/}
-            Go Fund Me
+            Adiutorium
           </div>
         </div>
         <Scrollbars

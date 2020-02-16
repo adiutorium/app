@@ -73,8 +73,11 @@
 }
 
 .logoContainer {
+  color: white;
+  text-align: center;
   height: 64px;
-  padding: 13px 20px 15px 22px;
+  //padding: 13px 20px 15px 22px;
+  font-size: 2.5rem;
   img {
     height: 36px;
   }
