@@ -1,8 +1,7 @@
 import actions from './actions'
 
 const initialState = {
-  campaignList: [],
-  loading: true,
+  campaignList: []
 }
 
 const addCampaignToList = (state, campaign) => {

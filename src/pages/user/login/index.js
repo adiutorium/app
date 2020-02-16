@@ -15,18 +15,7 @@ import {
 import { getUserAddress } from '../../../ethereumConnections/web3'
 
 function Login({ loading, dispatch }) {
-  // onSubmit = event => {
-  //   event.preventDefault()
-  //   const { form, dispatch } = this.props
-  //   form.validateFields((error, values) => {
-  //     if (!error) {
-  //       dispatch({
-  //         type: 'user/LOGIN',
-  //         payload: values,
-  //       })
-  //     }
-  //   })
-  // }
+
   const handleClick = e => {
     console.log('i clicked save and I liked it', e)
     console.log(boxElements.box)
@@ -187,6 +176,6 @@ function Login({ loading, dispatch }) {
     </div>
   )
 }
-const mapStateToProps = ({ campaigns, dispatch }) => ({ loading: campaigns.loading, dispatch })
+const mapStateToProps = ({ user, dispatch }) => ({ loading: user.loading, dispatch })
 
 export default connect(mapStateToProps)(Login)

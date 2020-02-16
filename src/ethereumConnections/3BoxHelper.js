@@ -8,23 +8,32 @@ let BOX
 let SPACE
 
 export const get3BoxProfileForAddress = async (address, ethereumProvider) => {
-  return new Promise((resolve, reject) => {
-    Box.openBox(address, ethereumProvider)
-      .then(_box => {
-        BOX = _box
-        return BOX.syncDone
-      })
-      .then(() => {
-        return BOX.openSpace(BoxAppName)
-      })
-      .then(_space => {
-        SPACE = _space
-        return SPACE.syncDone
-      })
-      .then(resolve)
-      .catch(reject)
-  })
+  BOX = await Box.openBox(address, ethereumProvider);
+  await BOX.syncDone;
+  SPACE = await BOX.openSpace(BoxAppName);
+  await SPACE.syncDone;
+  return true;
 }
+
+// export const get3BoxProfileForAddress = async (address, ethereumProvider) => {
+//   return new Promise((resolve, reject) => {
+//     Box.openBox(address, ethereumProvider)
+//       .then(_box => {
+//         console.log(address,ethereumProvider, "abcedfgh")
+//         BOX = _box
+//         return BOX.syncDone
+//       })
+//       .then(() => {
+//         return BOX.openSpace(BoxAppName)
+//       })
+//       .then(_space => {
+//         SPACE = _space
+//         return SPACE.syncDone
+//       })
+//       .then(resolve)
+//       .catch(reject)
+//   })
+// }
 
 export const addPublicProfileDataForSelf = (key, value) => {
   value = JSON.stringify(value)
@@ -189,6 +198,7 @@ export const getPublicAppDataWithKey = (ethereumAddress, key) => {
 }
 
 export const getPublicProfileForOthers = ethereumAddress => {
+  console.log("inside getPublicProfileForOthers", ethereumAddress)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       Box.getProfile(ethereumAddress)

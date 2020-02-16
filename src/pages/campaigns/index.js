@@ -34,8 +34,8 @@ function AllCampaigns({ loading, campaigns }) {
   )
 }
 
-const mapStateToProps = ({ campaigns }) => ({
-  loading: campaigns.loading,
+const mapStateToProps = ({ user,campaigns }) => ({
+  loading: user.loading,
   campaigns: campaigns.campaignList,
 })
 export default connect(mapStateToProps)(AllCampaigns)

@@ -17,7 +17,7 @@ function SpendDonations({ campaignIndex }) {
   const [amount, setAmount] = useState(0)
   const openTransaction = e => {
     e.preventDefault()
-    spendDonations(campaignIndex, ethAddress, amount, '', true, txHash => {
+    spendDonations(campaignIndex, ethAddress, amount, '', false, txHash => {
       console.log(txHash)
     }).then(res => {
       console.log(res)

@@ -1,12 +1,13 @@
 import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { notification } from 'antd'
-import { logout } from 'services/user'
+// import { logout } from 'services/user'
 import actions from './actions'
 import {
   getPublicAppForOthers,
   getPublicProfileForOthers,
 } from '../../ethereumConnections/3BoxHelper'
 import { getUserAddress } from '../../ethereumConnections/web3'
+
 // import { Redirect } from 'react-router-dom'
 
 export function* LOGIN({ payload }) {
@@ -14,7 +15,7 @@ export function* LOGIN({ payload }) {
   yield put({
     type: 'user/SET_STATE',
     payload: {
-      loading: false,
+      loading: true,
     },
   })
   // const success = yield call(login, email, password)
@@ -30,34 +31,22 @@ export function* LOGIN({ payload }) {
   }
 }
 
-// const setUrl = (userType) =>{
-//   switch (userType) {
-//     case 'organisation':
-//       return  '/organisations/first-organisation'
-//     // return <Redirect to="/organisations/first-organisation" />;
-//     case 'fundRaiser':
-//       return '/campaigns'
-//     case 'donor':
-//       return '/campaigns'
-//     default:
-//       return "/404"
-//   }
-// }
 
 export function* LOAD_CURRENT_ACCOUNT() {
+  console.log("LOAD_CURRENT_ACCOUNT called ========================================")
   yield put({
     type: 'user/SET_STATE',
     payload: {
       loading: true,
     },
   })
-  // const response = yield call(currentAccount)
-  //   const boxInstance= yield call(getBox)
+
   const currentUserAddr = yield call(getUserAddress)
   const profile = yield call(getPublicProfileForOthers, currentUserAddr)
   const appData = yield call(getPublicAppForOthers, currentUserAddr)
   console.log(profile)
   if (profile.name) {
+
     console.log(profile)
     const payload = {
       id: profile.name,
@@ -88,7 +77,6 @@ export function* LOAD_CURRENT_ACCOUNT() {
 }
 
 export function* LOGOUT() {
-  yield call(logout)
   yield put({
     type: 'user/SET_STATE',
     payload: {

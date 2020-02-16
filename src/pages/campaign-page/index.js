@@ -49,7 +49,7 @@ const donorData = [
   },
 ]
 
-function CampaignPage({ match, dispatch, location, loading }) {
+function CampaignPage({ match, location, loading }) {
   // const genExtra = () => (
   //   <Icon
   //     type="setting"
@@ -61,25 +61,14 @@ function CampaignPage({ match, dispatch, location, loading }) {
   // );
   const [campaign, setCampaign] = useState('')
   const [campaignDetails, setCampaignDetails] = useState({ progressItem: {}, donors: [] })
+  const [shared, setShared] = useState(false)
 
   useEffect(() => {
     const queryObj = qs.parse(location.search, { ignoreQueryPrefix: true })
     if (queryObj.shareable) {
-      dispatch({
-        type: 'settings/CHANGE_SETTING',
-        payload: {
-          setting: 'isCampaignPage',
-          value: true,
-        },
-      })
+      setShared(true)
     } else {
-      dispatch({
-        type: 'settings/CHANGE_SETTING',
-        payload: {
-          setting: 'isCampaignPage',
-          value: false,
-        },
-      })
+      setShared(false)
     }
   }, [])
 
@@ -173,7 +162,144 @@ function CampaignPage({ match, dispatch, location, loading }) {
 
     document.body.removeChild(element)
   }
+if(shared){
+  return(
+    <div>
+      <Helmet title={campaign} />
+      {loading ? (
+        'Loading...'
+      ) : (
+        <div className="card">
+          <div className="card-body">
+            <div className="row">
+              <div className={`col-xl-12 mb-4 ${styles.bottomBorder}`}>
+                <CampaignHeadCard id={convertFromHex(campaign)} campaignDetails={campaignDetails} />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-8">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <DateTab
+                      icon="lnr lnr-inbox"
+                      number="US 4658-1678-7528"
+                      title="Started On"
+                      date="15 Feb 2020"
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    <DateTab
+                      icon="lnr lnr-inbox"
+                      number="IBAN 445646-8748-4664-1678-5416"
+                      title={campaignDetails.donationEndTimeTitle || ''}
+                      date={campaignDetails.donationEndTime || ''}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-lg-12">
+                    <Collapse accordion defaultActiveKey={['2']}>
+                      <Panel
+                        header={<span className={styles.panelHeader}> Campaign Documents</span>}
+                        key="1"
+                        extra={
+                          <Icon
+                            type="file"
+                            onClick={event => {
+                              // If you don't want click extra trigger collapse, you can prevent this:
+                              event.stopPropagation()
+                            }}
+                          />
+                        }
+                      >
+                        <div>
+                          <Upload
+                            onPreview={file => {
+                              download(file)
+                            }}
+                            fileList={campaignDetails.files}
+                            listType="picture-card"
+                          />
+                        </div>
+                      </Panel>
+                      <Panel
+                        header={
+                          <span className={styles.panelHeader}>
+                            {' '}
+                            All Transactions <SpendDonations campaignIndex={campaign} />{' '}
+                            <span className="float-right">
+                              <span className={`${styles.dai} font-size-16`}>
+                                {campaignDetails.totalSpent}
+                              </span>{' '}
+                              <span className="text-muted font-size-10">
+                                {' '}
+                                of{' '}
+                                {campaignDetails.totalDonationSpecific +
+                                campaignDetails.totalDonationOpen}{' '}
+                                Dai spent
+                              </span>
+                            </span>
+                          </span>
+                        }
+                        key="2"
+                      >
+                        <div className="row">
+                          <div className="col-lg-12">
+                            <CampaignLedger
+                              campaignId={convertFromHex(match.params.campaign)}
+                              details={campaignDetails}
+                            />
+                          </div>
+                        </div>
+                      </Panel>
+                    </Collapse>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4">
+                <div className="utils__title utils__title--flat">
+                  <strong className="text-uppercase font-size-16"> Campaign Progress</strong>
+                </div>
 
+                <ProgressCard
+                  title={campaignDetails.progressItem.title || ''}
+                  note={campaignDetails.progressItem.note || ''}
+                  currentValue={campaignDetails.progressItem.currentValue || ''}
+                  percent={campaignDetails.progressItem.percent || ''}
+                  dataColor={campaignDetails.progressItem.dataColor || ''}
+                />
+
+                <div className="card graphCard ">
+                  <div className="card-header">
+                    <div className="utils__title utils__title--flat">
+                      <strong className="text-uppercase font-size-16"> Recent Donors</strong>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    {campaignDetails.donors.map(donor => {
+                      const actionData = (
+                        <span style={{ color: donorData[0].actionDataColor }}>{donor.amount}</span>
+                      )
+                      return (
+                        <ShortItemInfo
+                          key={donorData[0].name}
+                          img={donorData[0].img}
+                          name={donorData[0].name}
+                          note={donor.address}
+                          actionData={actionData}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
       <Helmet title={campaign} />
@@ -246,7 +372,7 @@ function CampaignPage({ match, dispatch, location, loading }) {
                                 {' '}
                                 of{' '}
                                 {campaignDetails.totalDonationSpecific +
-                                  campaignDetails.totalDonationOpen}{' '}
+                                campaignDetails.totalDonationOpen}{' '}
                                 Dai spent
                               </span>
                             </span>
@@ -311,5 +437,5 @@ function CampaignPage({ match, dispatch, location, loading }) {
     </Authorize>
   )
 }
-const mapStateToProps = ({ dispatch, campaigns }) => ({ dispatch, loading: campaigns.loading })
+const mapStateToProps = ({ dispatch, user }) => ({ dispatch, loading: user.loading })
 export default connect(mapStateToProps)(withRouter(CampaignPage))

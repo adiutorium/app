@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import Loader from 'components/LayoutComponents/Loader'
 import IndexLayout from 'layouts'
 import NotFoundPage from 'pages/404'
-import { getUserTypeUrl } from './services/user'
+import getUserTypeUrl from './services/user'
+
 
 const loadable = loader =>
   Loadable({
@@ -50,6 +51,7 @@ const routes = [
     path: '/organisations/:organisationName',
     component: loadable(() => import('pages/organisation/organisation-page')),
   },
+
 ]
 
 const mapStateToProps = ({ user }) => {
@@ -59,7 +61,9 @@ const mapStateToProps = ({ user }) => {
 class Router extends React.Component {
   render() {
     const { history, userType } = this.props
+    console.log(history,userType)
     const to = getUserTypeUrl(userType)
+
     return (
       <ConnectedRouter history={history}>
         <IndexLayout>
@@ -73,6 +77,7 @@ class Router extends React.Component {
                 exact={route.exact}
               />
             ))}
+
             <Route component={NotFoundPage} />
           </Switch>
         </IndexLayout>

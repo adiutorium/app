@@ -7,7 +7,7 @@ import Loader from 'components/LayoutComponents/Loader'
 import PublicLayout from './Public'
 import LoginLayout from './Login'
 import MainLayout from './Main'
-import { getUserTypeUrl } from '../services/user'
+import getUserTypeUrl  from '../services/user'
 
 const Layouts = {
   public: PublicLayout,

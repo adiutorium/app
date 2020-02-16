@@ -12,23 +12,29 @@ import { getCampaigns, initiateEthereumConnection } from '../../ethereumConnecti
 
 export function* CONNECT_WEB3() {
   yield put({
-    type: 'campaigns/SET_STATE',
+    type: 'user/SET_STATE',
     payload: { loading: true },
   })
   yield call(initiateEthereumConnection, [true])
+  console.log("initiateEthereumConnection testing")
   // TODO - add campaigns one by one using callback
   const campaignList = yield call(getCampaigns, x => console.log(x))
+  console.log("campaignListcampaignListcampaignList",campaignList)
+
+
   yield put({
     type: 'campaigns/SET_CAMPAIGNS_FOR_USER',
     payload: { campaignList },
   })
   yield put({
-    type: 'campaigns/SET_STATE',
-    payload: { loading: false },
-  })
-  yield put({
     type: 'user/LOAD_CURRENT_ACCOUNT',
   })
+
+  // yield put({
+  //   type: 'user/SET_STATE',
+  //   payload: { loading: false },
+  // })
+
 }
 
 export default function* rootSaga() {

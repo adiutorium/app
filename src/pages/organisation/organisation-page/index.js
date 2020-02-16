@@ -29,8 +29,10 @@ function OrganisationPage({ dispatch, loading }) {
 
   useEffect(() => {
     if (!loading) {
+      const tempApprovals = approvals
       getApprovalRequests(approval => {
-        setapprovals([...approvals, approval])
+        tempApprovals.push(approval)
+        setapprovals([...tempApprovals])
         console.log(approval)
       })
     }
@@ -39,13 +41,13 @@ function OrganisationPage({ dispatch, loading }) {
   return (
     <Authorize roles={['admin']} redirect to="/dashboard/beta">
       <div className="utils__title utils__title--flat mb-3">
-        <strong className="text-uppercase font-size-16">Your Requests (3)</strong>
+        <strong className="text-uppercase font-size-16">Your Requests ({approvals.length})</strong>
         {/*<Button className="ml-3">View All</Button>*/}
       </div>
       <div className="row">
-        <div className="col-lg-4">
-          {approvals.map(({ amount, senderAddress, approved, requestId }) => {
-            return (
+        {approvals.map(({ amount, senderAddress, approved, requestId }) => {
+          return (
+            <div className="col-lg-4">
               <PaymentCard
                 key={requestId.toString()}
                 requestId={requestId}
@@ -61,12 +63,12 @@ function OrganisationPage({ dispatch, loading }) {
                 }
                 sum={`${amount} DAI`}
               />
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
     </Authorize>
   )
 }
-const mapStateToProps = ({ dispatch, campaigns }) => ({ dispatch, loading: campaigns.loading })
+const mapStateToProps = ({ dispatch, user }) => ({ dispatch, loading: user.loading })
 export default connect(mapStateToProps)(OrganisationPage)
