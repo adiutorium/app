@@ -27,7 +27,7 @@ function CampaignHeadCard({ id, campaignDetails: { campaignName, description }, 
       <div>
         <div className={styles.left}>
           <Avatar src={profile.avatar} size="90" borderColor="white" border />
-          <strong className="d-block">{profile.name}</strong>
+          <strong className="d-block text-center">{profile.name}</strong>
           <p className="text-muted text-center">
             Organiser <br /> and <br /> Beneficiary
           </p>

@@ -15,7 +15,7 @@ function MetaMaskDonate({ id, amount, isOpen }) {
     e.preventDefault()
     donateTokens(id, amount, isOpen)
   }
-  return <Button onClick={handleClick}>Donate Using MetaMask</Button>
+  return <Button className="mr-2 mb-2" onClick={handleClick}>Donate Using MetaMask</Button>
 }
 
 export default MetaMaskDonate

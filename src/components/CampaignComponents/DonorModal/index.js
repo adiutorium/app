@@ -52,6 +52,7 @@ function DonorModal({ id }) {
             Send Eth To:
             <br />
             <span className="eth-address">0x7949173E38cEf39e75E05D2d2C232FBE8BAe5E20</span>
+            <br />
             <MetaMaskDonate
               id={id}
               amount={donationDetails.donationAmount}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 // import moment from 'moment'
+import moment from 'moment'
 import { Button, Form, Input, Select, Upload, Icon, DatePicker } from 'antd'
 import CampaignSteps from '../../components/CampaignComponents/CampaignSteps'
 import './styles.scss'
@@ -107,6 +108,7 @@ function CreateCampaign() {
               <Item extra="Choose a category">
                 <Select onSelect={e => setFormData('type', e)}>
                   <Select.Option value="Medical"> Medical </Select.Option>
+                  <Select.Option value="Environment"> Environment </Select.Option>
                 </Select>
               </Item>
             </div>
@@ -183,7 +185,7 @@ function CreateCampaign() {
               <Item extra="Last date for accepting Funds" wrapperCol={{ lg: 16 }}>
                 <DatePicker
                   onChange={e => {
-                    const endingTime = e.unix()
+                    const endingTime = e&& e.unix() || moment()
                     console.log(endingTime)
                     setFormData('donationTime', endingTime)
                   }}
@@ -194,7 +196,7 @@ function CreateCampaign() {
               <Item extra="Last date for spending Funds" wrapperCol={{ lg: 16 }}>
                 <DatePicker
                   onChange={e => {
-                    const endingTime = e.unix()
+                    const endingTime = e&& e.unix() || moment()
                     console.log(endingTime)
                     setFormData('spendingTime', endingTime)
                   }}

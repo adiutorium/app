@@ -14,9 +14,9 @@ class ShortItemInfo extends React.Component {
         )}
         <div className={styles.description}>
           {name && <h2 className={styles.name}>{name}</h2>}
-          {note && <p className={styles.note}>{note}</p>}
+          {note && <span className={styles.note}>{note}</span>}
         </div>
-        {actionData && <div className={styles.actionData}>{actionData}</div>}
+        {actionData && <div className={styles.actionData}>{actionData} DAI </div>}
       </div>
     )
   }

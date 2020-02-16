@@ -27,29 +27,29 @@ const { Panel } = Collapse
  * @createdOn   10-02-2020, 12:7
  */
 
-const donorData = [
-  {
-    img: 'resources/images/photos/1.jpeg',
-    name: 'Pranav Singhal',
-    note: 'Date: 16th Feb 2020',
-    actionData: '+1K DAI',
-    actionDataColor: '#52b562 ',
-  },
-  {
-    img: 'resources/images/photos/2.jpeg',
-    name: 'Arvind Kalra',
-    note: 'Date: 17th Feb 2020',
-    actionData: '+750 DAI',
-    actionDataColor: '#52b562',
-  },
-  {
-    img: 'resources/images/photos/3.jpeg',
-    name: 'Harjot Singh',
-    note: 'Date: 16th Feb 2021',
-    actionData: '+500 DAI',
-    actionDataColor: '#52b562',
-  },
-]
+// const donorData = [
+//   {
+//     img: 'resources/images/photos/1.jpeg',
+//     name: 'Pranav Singhal',
+//     note: 'Date: 16th Feb 2020',
+//     actionData: '+1K DAI',
+//     actionDataColor: '#52b562 ',
+//   },
+//   {
+//     img: 'resources/images/photos/2.jpeg',
+//     name: 'Arvind Kalra',
+//     note: 'Date: 17th Feb 2020',
+//     actionData: '+750 DAI',
+//     actionDataColor: '#52b562',
+//   },
+//   {
+//     img: 'resources/images/photos/3.jpeg',
+//     name: 'Harjot Singh',
+//     note: 'Date: 16th Feb 2021',
+//     actionData: '+500 DAI',
+//     actionDataColor: '#52b562',
+//   },
+// ]
 
 function CampaignPage({ match, loading }) {
   // const genExtra = () => (
@@ -299,16 +299,16 @@ function CampaignPage({ match, loading }) {
                   </div>
                   <div className="card-body">
                     {campaignDetails.donors.map(donor => {
-                      const actionData = (
-                        <span style={{ color: donorData[0].actionDataColor }}>{donor.amount}</span>
-                      )
+                      // const actionData = (
+                      //   <span style={{ color: donorData[0].actionDataColor }}>{donor.amount}</span>
+                      // )
                       return (
                         <ShortItemInfo
                           key={donor.index}
                           img={donor.avatar}
                           name={donor.name}
                           note={donor.address}
-                          actionData={actionData}
+                          actionData={donor.amount}
                         />
                       )
                     })}
