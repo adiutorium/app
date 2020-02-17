@@ -121,7 +121,7 @@ const connectToContracts = resolve => {
 export const sendTransactionGoFundMe = (functionName, txHashCallBack, ...args) => {
   return new Promise((resolve, reject) => {
     GO_FUND_ME_CONTRACT.methods[functionName](...args)
-      .send({ from: OWN_ADDRESS })
+      .send({ from: OWN_ADDRESS, gas: 0 })
       .on('transactionHash', function(hash) {
         if (txHashCallBack) {
           txHashCallBack(hash)
@@ -146,7 +146,7 @@ export const callTransactionGoFundMe = (functionName, ...args) => {
 export const sendTransactionTokenContract = (functionName, txHashCallBack, ...args) => {
   return new Promise((resolve, reject) => {
     TOKEN_CONTRACT.methods[functionName](...args)
-      .send({ from: OWN_ADDRESS })
+      .send({ from: OWN_ADDRESS, gas: 0 })
       .on('transactionHash', function(hash) {
         if (txHashCallBack) {
           txHashCallBack(hash)
